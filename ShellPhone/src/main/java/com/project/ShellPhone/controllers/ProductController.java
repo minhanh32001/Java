@@ -14,42 +14,41 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/v1/products")
+@RequestMapping(path = "api/product")
 public class ProductController {
     @Autowired
     private ProductRepo productRepo;
-    @GetMapping("")
 
-    ResponseEntity<RespondObject> getAllProducts(){
-    List<Product> allProducts = productRepo.findAll();
+    @GetMapping("")
+    ResponseEntity<RespondObject> getAllProducts() {
+        List<Product> allProducts = productRepo.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Get all products successfully", allProducts));
 
-
-
-    List<Product> getAllProducts(){
-        return productRepo.findAll();
-        
     }
+
     @GetMapping("/byType")
-    List<Product> getProductByType(@RequestParam("type") Type type) {
-        return productRepo.findByType(type);
+    ResponseEntity<RespondObject> getProductByType(@RequestParam("type") Type type) {
+        List<Product> productByType = productRepo.findByType(type);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Get products successfully", productByType));
     }
 
-    @GetMapping("byId/{id}")
-    ResponseEntity<RespondObject> getProduct(@PathVariable Long id){
+    @GetMapping("/byId}")
+    ResponseEntity<RespondObject> getProduct(@RequestParam Long id) {
         Optional<Product> productFound = productRepo.findById(id);
-        return productFound.isPresent()?
-            ResponseEntity.status(HttpStatus.OK).body(
-                    new RespondObject("ok", "found product", productFound)
-          ):
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new RespondObject("false", "can not found", "")
-            );
+        return productFound.isPresent() ?
+                ResponseEntity.status(HttpStatus.OK).body(
+                        new RespondObject("ok", "found product", productFound)
+                ) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new RespondObject("false", "can not found", "")
+                );
     }
-    @PutMapping("/add/{name}")
-    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct, @PathVariable String name){
-        Product updateProduct = productRepo.findByName(name)
+
+    @PutMapping("/add")
+    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct, @RequestParam Long id) {
+        Product updateProduct = productRepo.findById(id)
                 .map(product -> {
                     product.setName(newProduct.getName());
                     product.setPrice(newProduct.getPrice());
@@ -58,7 +57,7 @@ public class ProductController {
                     product.setUrl(newProduct.getUrl());
                     product.setDescribe(newProduct.getDescribe());
                     return productRepo.save(product);
-                }).orElseGet(()-> {
+                }).orElseGet(() -> {
                     return productRepo.save(newProduct);
                 });
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -67,17 +66,11 @@ public class ProductController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
-    ResponseEntity<RespondObject> deleteProduct(@PathVariable Long id) {
+    @DeleteMapping("/delete")
+    ResponseEntity<RespondObject> deleteProduct(@RequestParam Long id) {
         productRepo.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Delete product Successfully", ""));
     }
-
-    @GetMapping("/{type}")
-    ResponseEntity<RespondObject> getProductByType(@PathVariable("type") Type type){
-        List<Product> productsByType = productRepo.findByType(type);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Get product by "+ type+" Successfully", productsByType ));
-    }
+}
 
