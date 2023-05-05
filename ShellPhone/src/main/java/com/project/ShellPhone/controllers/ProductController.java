@@ -19,9 +19,15 @@ public class ProductController {
     @Autowired
     private ProductRepo productRepo;
     @GetMapping("")
+
     List<Product> getAllProducts(){
         return productRepo.findAll();
     }
+    @GetMapping("/byType")
+    List<Product> getProductByType(@RequestParam("type") Type type) {
+        return productRepo.findByType(type);
+    }
+
     @GetMapping("byId/{id}")
     ResponseEntity<RespondObject> getProduct(@PathVariable Long id){
         Optional<Product> productFound = productRepo.findById(id);
@@ -40,9 +46,4 @@ public class ProductController {
                 new RespondObject("ok", "Insert product Successfully", productRepo.save(newProduct))
         );
     }
-    @GetMapping("/{type}")
-        List<Product> getProductByType(@PathVariable("type") Type type) {
-        return productRepo.findByType(type);
-    }
-
 }
