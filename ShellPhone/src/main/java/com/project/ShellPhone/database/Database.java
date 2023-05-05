@@ -1,8 +1,11 @@
 package com.project.ShellPhone.database;
 
+import com.project.ShellPhone.models.Cart;
 import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.Type;
+import com.project.ShellPhone.models.User;
 import com.project.ShellPhone.repo.ProductRepo;
+import com.project.ShellPhone.repo.UserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
     @Bean
-    CommandLineRunner initDatabase(ProductRepo productRepo){
+    CommandLineRunner initDatabase(ProductRepo productRepo, UserRepo userRepo){
         return new CommandLineRunner() {
 
             @Override
@@ -34,7 +37,9 @@ public class Database {
                 logger.info("insert data"+productRepo.save(productF));
                 logger.info("insert data"+productRepo.save(productG));
                 logger.info("insert data"+productRepo.save(productH));
-
+                /*Cart cart1 = new Cart();
+                User user3 = new User("minhanh", "minhanh", "name","url");
+                logger.info("insert data"+userRepo.save(user3));*/
             }
         };
     }
