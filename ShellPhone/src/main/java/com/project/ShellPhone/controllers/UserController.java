@@ -1,5 +1,6 @@
 package com.project.ShellPhone.controllers;
 
+import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.RespondObject;
 import com.project.ShellPhone.models.User;
 import com.project.ShellPhone.repo.UserRepo;
@@ -17,16 +18,18 @@ public class UserController {
     @Autowired
     private UserRepo userRepo;
     @GetMapping("")
-    List<User> allUsers() {
-        return userRepo.findAll();
-    }
+    ResponseEntity<RespondObject> getAllUsers(){
+        List<User> allUsers = userRepo.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Get all user successfully", allUsers));
 
+    }
     @GetMapping("/{id}")
     ResponseEntity<RespondObject> getUserById(@PathVariable Long id) {
         Optional<User> userFound = userRepo.findById(id);
         return userFound.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new RespondObject("ok", "found product", userFound)
+                        new RespondObject("ok", "found user", userFound)
                 ) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                         new RespondObject("false", "can not found", "")
