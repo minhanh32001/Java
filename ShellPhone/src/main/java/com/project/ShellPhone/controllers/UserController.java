@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/v1/user")
+@RequestMapping(path = "api/user")
 public class UserController {
     @Autowired
     private UserRepo userRepo;
@@ -24,8 +24,8 @@ public class UserController {
                 new RespondObject("ok", "Get all user successfully", allUsers));
 
     }
-    @GetMapping("/{id}")
-    ResponseEntity<RespondObject> getUserById(@PathVariable Long id) {
+    @GetMapping("/getUser")
+    ResponseEntity<RespondObject> getUserById(@RequestParam Long id) {
         Optional<User> userFound = userRepo.findById(id);
         return userFound.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
