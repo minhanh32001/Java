@@ -17,10 +17,9 @@ public class UserController {
     @Autowired
     private UserRepo userRepo;
     @GetMapping("")
-
-
-        /*List<User> allUsers = userRepo.findAll();
-        return allUsers));*/
+    List<User> allUsers() {
+        return userRepo.findAll();
+    }
 
     @GetMapping("/{id}")
     ResponseEntity<RespondObject> getUserById(@PathVariable Long id) {

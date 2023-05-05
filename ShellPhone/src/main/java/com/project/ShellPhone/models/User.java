@@ -1,5 +1,6 @@
 package com.project.ShellPhone.models;
 
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,8 +13,6 @@ public class User{
     private String username;
     private String password;
     private String url;
-    //private Cart cart;
-
     public User (){}
     public User(String name, String username, String password, String url) {
         this.name = name;
@@ -32,7 +31,4 @@ public class User{
                 ", url='" + url + '\'' +
                 '}';
     }
-    /*public Cart getCart() {
-        return cart;
-    }*/
 }
