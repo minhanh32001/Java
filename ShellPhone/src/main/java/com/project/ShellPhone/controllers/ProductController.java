@@ -19,8 +19,11 @@ public class ProductController {
     @Autowired
     private ProductRepo productRepo;
     @GetMapping("")
-    List<Product> getAllProducts(){
-        return productRepo.findAll();
+    ResponseEntity<RespondObject> getAllProducts(){
+    List<Product> allProducts = productRepo.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Get all products successfully", allProducts));
+
     }
     @GetMapping("byId/{id}")
     ResponseEntity<RespondObject> getProduct(@PathVariable Long id){
@@ -60,8 +63,10 @@ public class ProductController {
     }
 
     @GetMapping("/{type}")
-        List<Product> getProductByType(@PathVariable("type") Type type) {
-        return productRepo.findByType(type);
+    ResponseEntity<RespondObject> getProductByType(@PathVariable("type") Type type){
+        List<Product> productsByType = productRepo.findByType(type);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Get product by "+ type+" Successfully", productsByType ));
     }
 
 }
