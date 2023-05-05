@@ -18,7 +18,6 @@ public class Database {
     @Bean
     CommandLineRunner initDatabase(ProductRepo productRepo, UserRepo userRepo){
         return new CommandLineRunner() {
-
             @Override
             public void run(String... args) throws Exception {
                 Product productA = new Product("Ipad 16", Type.IPAD ,3000.0, 300, "An old 16 ipad", "");
@@ -37,10 +36,14 @@ public class Database {
                 logger.info("insert data"+productRepo.save(productF));
                 logger.info("insert data"+productRepo.save(productG));
                 logger.info("insert data"+productRepo.save(productH));
-                /*Cart cart1 = new Cart();
+                /*Cart cart1 = new Cart();*/
                 User user3 = new User("minhanh", "minhanh", "name","url");
-                logger.info("insert data"+userRepo.save(user3));*/
+                User user1 = new User("minhanh", "minhanh", "name","url");
+                logger.info("insert data"+userRepo.save(user3));
+                logger.info("insert data"+userRepo.save(user1));
             }
         };
+
     }
+
 }

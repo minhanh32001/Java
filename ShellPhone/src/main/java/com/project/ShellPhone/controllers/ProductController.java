@@ -20,8 +20,16 @@ public class ProductController {
     private ProductRepo productRepo;
     @GetMapping("")
 
+    ResponseEntity<RespondObject> getAllProducts(){
+    List<Product> allProducts = productRepo.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Get all products successfully", allProducts));
+
+
+
     List<Product> getAllProducts(){
         return productRepo.findAll();
+        
     }
     @GetMapping("/byType")
     List<Product> getProductByType(@RequestParam("type") Type type) {
@@ -57,5 +65,19 @@ public class ProductController {
                 new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
         );
 
+    }
+
+    @DeleteMapping("/delete/{id}")
+    ResponseEntity<RespondObject> deleteProduct(@PathVariable Long id) {
+        productRepo.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Delete product Successfully", ""));
+    }
+
+    @GetMapping("/{type}")
+    ResponseEntity<RespondObject> getProductByType(@PathVariable("type") Type type){
+        List<Product> productsByType = productRepo.findByType(type);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Get product by "+ type+" Successfully", productsByType ));
     }
 
