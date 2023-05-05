@@ -39,11 +39,23 @@ public class ProductController {
                     new RespondObject("false", "can not found", "")
             );
     }
-    @PostMapping("/add")
-    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct){
-
+    @PutMapping("/add/{name}")
+    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct, @PathVariable String name){
+        Product updateProduct = productRepo.findByName(name)
+                .map(product -> {
+                    product.setName(newProduct.getName());
+                    product.setPrice(newProduct.getPrice());
+                    product.setType(newProduct.getType());
+                    product.setNumber(newProduct.getNumber());
+                    product.setUrl(newProduct.getUrl());
+                    product.setDescribe(newProduct.getDescribe());
+                    return productRepo.save(product);
+                }).orElseGet(()-> {
+                    return productRepo.save(newProduct);
+                });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Insert product Successfully", productRepo.save(newProduct))
+                new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
         );
+
     }
-}
+
