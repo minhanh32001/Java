@@ -34,7 +34,7 @@ public class ProductController {
                 new RespondObject("ok", "Get products successfully", productByType));
     }
 
-    @GetMapping("/byId}")
+    @GetMapping("/byId")
     ResponseEntity<RespondObject> getProduct(@RequestParam Long id) {
         Optional<Product> productFound = productRepo.findById(id);
         return productFound.isPresent() ?
