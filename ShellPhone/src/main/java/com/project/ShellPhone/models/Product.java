@@ -3,15 +3,17 @@ package com.project.ShellPhone.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Product")
+@Table(name = "product")
 public class Product {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     private String name;
     private Type type;
     private double price;
     private int number;
+
+    @Column(name = "descr")
     private String describe;
     private String url;
 
