@@ -18,47 +18,32 @@ import java.util.Optional;
 public class ProductController {
     @Autowired
     private ProductRepo productRepo;
-
     @GetMapping("")
-    List<Product> getAllProducts() {
+
+    List<Product> getAllProducts(){
         return productRepo.findAll();
     }
-
     @GetMapping("/byType")
     List<Product> getProductByType(@RequestParam("type") Type type) {
         return productRepo.findByType(type);
     }
 
     @GetMapping("byId/{id}")
-    ResponseEntity<RespondObject> getProduct(@PathVariable Long id) {
+    ResponseEntity<RespondObject> getProduct(@PathVariable Long id){
         Optional<Product> productFound = productRepo.findById(id);
-        return productFound.isPresent() ?
-                ResponseEntity.status(HttpStatus.OK).body(
-                        new RespondObject("ok", "found product", productFound)
-                ) :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new RespondObject("false", "can not found", "")
-                );
+        return productFound.isPresent()?
+            ResponseEntity.status(HttpStatus.OK).body(
+                    new RespondObject("ok", "found product", productFound)
+          ):
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new RespondObject("false", "can not found", "")
+            );
     }
+    @PostMapping("/add")
+    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct){
 
-    @PutMapping("/add/{name}")
-    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct, @PathVariable String name) {
-        Product updateProduct = productRepo.findByName(name)
-                .map(product -> {
-                    product.setName(newProduct.getName());
-                    product.setPrice(newProduct.getPrice());
-                    product.setType(newProduct.getType());
-                    product.setNumber(newProduct.getNumber());
-                    product.setUrl(newProduct.getUrl());
-                    product.setDescribe(newProduct.getDescribe());
-                    return productRepo.save(product);
-                }).orElseGet(() -> {
-                    return productRepo.save(newProduct);
-                });
         return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
+                new RespondObject("ok", "Insert product Successfully", productRepo.save(newProduct))
         );
-
     }
 }
-

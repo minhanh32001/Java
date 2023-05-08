@@ -31,9 +31,11 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", price=" + price +
+                ", number=" + number +
                 ", describe='" + describe + '\'' +
                 ", url='" + url + '\'' +
                 '}';
@@ -65,29 +67,5 @@ public class Product {
 
     public Type getType() {
         return type;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public void setDescribe(String describe) {
-        this.describe = describe;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 }
