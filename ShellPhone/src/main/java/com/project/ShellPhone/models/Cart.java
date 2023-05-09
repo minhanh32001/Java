@@ -1,34 +1,37 @@
 package com.project.ShellPhone.models;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
+@Entity
 public class Cart {
-    private List<Product> cart;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cartId")
+    private Long id;
+    @JoinColumn(name = "userId")
+    @OneToOne
+    private User user;
 
     public Cart() {
-        this.cart = new ArrayList<Product>();
     }
-    protected void showCart(){
-        for (Product product: this.cart){
-            product.toString();
-        }
 
+    public Cart(User user) {
+        this.user = user;
     }
-    protected void addProduct(Product product){
-        this.cart.add(product);
+
+    public Long getId() {
+        return id;
     }
-    protected void remove(Product product) {
-        this.cart.remove(product);
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    public double getPrice(){
-        double sumPrice = 0;
-        for (Product product: this.cart){
-            sumPrice += product.getPrice();
-        }
-        return sumPrice;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

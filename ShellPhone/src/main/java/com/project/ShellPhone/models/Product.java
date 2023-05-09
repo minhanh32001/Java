@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    private Long productId;
     private String name;
     private Type type;
     private double price;
@@ -35,7 +35,7 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
+                "id=" + productId +
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", price=" + price +
@@ -48,7 +48,7 @@ public class Product {
     }
 
     public Long getId() {
-        return id;
+        return productId;
     }
 
     public String getName() {
