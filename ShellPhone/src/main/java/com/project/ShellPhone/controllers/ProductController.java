@@ -34,8 +34,8 @@ public class ProductController {
                 new RespondObject("ok", "Get products successfully", productByType));
     }
 
-    @GetMapping("/byId")
-    ResponseEntity<RespondObject> getProduct(@RequestParam Long id) {
+    @GetMapping("/byId/{id}")
+    ResponseEntity<RespondObject> getProduct(@PathVariable Long id) {
         Optional<Product> productFound = productRepo.findById(id);
         return productFound.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
@@ -46,8 +46,19 @@ public class ProductController {
                 );
     }
 
-    @PutMapping("/add")
-    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct, @RequestParam Long id) {
+
+    @PostMapping("/add")
+    public ResponseEntity<RespondObject> addProduct(@RequestBody Product newProduct) {
+        Product savedProduct = productRepo.save(newProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new RespondObject("ok", "Product created successfully", savedProduct)
+        );
+    }
+
+
+
+    @PutMapping("/{id}")
+    ResponseEntity<RespondObject> updateProductById(@PathVariable Long id, @RequestBody Product newProduct) {
         Product updateProduct = productRepo.findById(id)
                 .map(product -> {
                     product.setName(newProduct.getName());
@@ -57,20 +68,27 @@ public class ProductController {
                     product.setUrl(newProduct.getUrl());
                     product.setDescribe(newProduct.getDescribe());
                     return productRepo.save(product);
-                }).orElseGet(() -> {
-                    return productRepo.save(newProduct);
-                });
+                })
+                .orElseGet(() -> productRepo.save(newProduct));
+
         return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
+                new RespondObject("ok", "Update product Successfully", updateProduct)
         );
 
     }
 
+
     @DeleteMapping("/delete")
-    ResponseEntity<RespondObject> deleteProduct(@RequestParam Long id) {
-        productRepo.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Delete product Successfully", ""));
+    public ResponseEntity<RespondObject> deleteProduct(@RequestParam Long id) {
+        if (productRepo.existsById(id)) {
+            productRepo.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new RespondObject("ok", "Delete product Successfully", ""));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new RespondObject("error", "Product not found", ""));
+        }
     }
+
 }
 

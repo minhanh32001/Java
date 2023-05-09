@@ -24,8 +24,8 @@ public class UserController {
                 new RespondObject("ok", "Get all user successfully", allUsers));
 
     }
-    @GetMapping("/getUser")
-    ResponseEntity<RespondObject> getUserById(@RequestParam Long id) {
+    @GetMapping("/getUser/{id}")
+    ResponseEntity<RespondObject> getUserById(@PathVariable Long id) {
         Optional<User> userFound = userRepo.findById(id);
         return userFound.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
@@ -35,6 +35,7 @@ public class UserController {
                         new RespondObject("false", "can not found", "")
                 );
     }
+
 
 }
 
