@@ -11,6 +11,8 @@ public class Product {
     private String name;
     private Type type;
     private double price;
+    private int discount;
+    private double lastPrice;
     private int number;
 
     @Column(name = "descr")
@@ -19,10 +21,12 @@ public class Product {
 
     public Product(){}
 
-    public Product(String name, Type type, double price, int number, String describe, String url) {
+    public Product(String name, Type type, double price,int discount, int number, String describe, String url) {
         this.name = name;
         this.type = type;
         this.price = price;
+        this.discount = discount;
+        this.lastPrice = this.price-this.price*this.discount/100;
         this.number = number;
         this.describe = describe;
         this.url = url;
@@ -31,9 +35,13 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", price=" + price +
+                ", discount=" + discount +
+                ", lastPrice=" + lastPrice +
+                ", number=" + number +
                 ", describe='" + describe + '\'' +
                 ", url='" + url + '\'' +
                 '}';
@@ -89,5 +97,17 @@ public class Product {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public double getLastPrice() {
+        return lastPrice;
     }
 }
