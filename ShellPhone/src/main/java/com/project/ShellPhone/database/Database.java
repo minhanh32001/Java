@@ -38,6 +38,8 @@ public class Database {
                 User user3 = new User("minhanh", "minhanh", "name","url");
                 User user1 = new User("minhanh", "minhanh", "name","url");
                 logger.info("insert data"+userRepo.save(user3));
+                User user4 = new User("minhanh", "minhanh", "name","url");
+                logger.info("insert data"+userRepo.save(user4));
                 logger.info("insert data"+userRepo.save(user1));
                 CartItems cartItems1 = new CartItems(user1, productA, 3);
                 logger.info("insert data"+cartItemsRepo.save(cartItems1));
