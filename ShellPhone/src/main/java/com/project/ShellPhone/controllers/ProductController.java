@@ -33,6 +33,13 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Get products successfully", productByType));
     }
+    @GetMapping("/combine")
+    ResponseEntity<RespondObject> getMacProduct(@RequestParam("type1") Type type1, @RequestParam("type2") Type type2){
+        List<Product> productByType = productRepo.findByType(type1);
+        productByType.addAll(productRepo.findByType(type2));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Get combine products successfully", productByType));
+    }
 
     @GetMapping("/byId")
     ResponseEntity<RespondObject> getProduct(@RequestParam Long id) {

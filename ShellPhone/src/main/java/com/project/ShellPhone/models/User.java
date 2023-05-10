@@ -8,7 +8,8 @@ import jakarta.persistence.*;
 public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
     private String name;
     private String username;
     private String password;
@@ -24,7 +25,7 @@ public class User{
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + userId +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
@@ -33,7 +34,7 @@ public class User{
     }
 
     public Long getId() {
-        return id;
+        return userId;
     }
 
     public String getName() {
