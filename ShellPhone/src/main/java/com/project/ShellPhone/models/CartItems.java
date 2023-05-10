@@ -1,22 +1,25 @@
 package com.project.ShellPhone.models;
 
 import jakarta.persistence.*;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "cart_items")
-public class CartItems {
+@NoRepositoryBean
+public class CartItems implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_items_id")
     private Long cartId;
 
-    @JoinColumn(name = "cartId")
-    @ManyToOne
-    private Cart cart;
+    @JoinColumn(name = "user_id")
+    @OneToOne
+    private User user;
 
     @JoinColumn(name = "productId")
     @ManyToOne
@@ -26,22 +29,32 @@ public class CartItems {
     public CartItems() {
     }
 
-    public CartItems(Cart cart, Product product, int itemNumber) {
-        this.cart = cart;
+    public CartItems(User user, Product product, int itemNumber) {
+        this.user = user;
         this.product = product;
         this.itemNumber = itemNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "CartItems{" +
+                "cartId=" + cartId +
+                ", user=" + user +
+                ", product=" + product +
+                ", itemNumber=" + itemNumber +
+                '}';
     }
 
     public Long getId() {
         return cartId;
     }
 
-    public Cart getUser() {
-        return cart;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(Cart user) {
-        this.cart = user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Product getProduct() {

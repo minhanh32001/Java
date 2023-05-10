@@ -2,7 +2,6 @@ package com.project.ShellPhone.database;
 
 import com.project.ShellPhone.models.*;
 import com.project.ShellPhone.repo.CartItemsRepo;
-import com.project.ShellPhone.repo.CartRepo;
 import com.project.ShellPhone.repo.ProductRepo;
 import com.project.ShellPhone.repo.UserRepo;
 import org.slf4j.Logger;
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
     @Bean
-    CommandLineRunner initDatabase(ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, CartRepo cartRepo){
+    CommandLineRunner initDatabase(ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo){
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -36,15 +35,18 @@ public class Database {
 //                logger.info("insert data"+productRepo.save(productF));
 //                logger.info("insert data"+productRepo.save(productG));
 //                logger.info("insert data"+productRepo.save(productH));
-//                /*Cart cart1 = new Cart();*/
                 User user3 = new User("minhanh", "minhanh", "name","url");
                 User user1 = new User("minhanh", "minhanh", "name","url");
                 logger.info("insert data"+userRepo.save(user3));
                 logger.info("insert data"+userRepo.save(user1));
-                Cart cart = new Cart(user1);
-                logger.info("insert data"+cartRepo.save(cart));
-                CartItems cartItems = new CartItems(cart, productA, 3);
-                logger.info("insert data"+cartItemsRepo.save(cartItems));
+                CartItems cartItems1 = new CartItems(user1, productA, 3);
+                logger.info("insert data"+cartItemsRepo.save(cartItems1));
+                CartItems cartItems2 = new CartItems(user1, productA, 3);
+                logger.info("insert data"+cartItemsRepo.save(cartItems2));
+                CartItems cartItems3 = new CartItems(user1, productB, 2);
+                logger.info("insert data"+cartItemsRepo.save(cartItems3));
+                CartItems cartItems4 = new CartItems(user3, productA, 6);
+                logger.info("insert data"+cartItemsRepo.save(cartItems4));
             }
         };
 
