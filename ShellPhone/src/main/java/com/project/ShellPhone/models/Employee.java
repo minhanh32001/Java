@@ -3,11 +3,11 @@ package com.project.ShellPhone.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "employees")
+public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "user_id")
+    @Column(name = "employee_id")
     private Long Id;
     private String name;
     private String username;
@@ -16,10 +16,10 @@ public class User {
 
 //    private List<Order> orders;
 
-    public User() {
+    public Employee() {
     }
 
-    public User(String name, String username, String password, String url) {
+    public Employee(String name, String username, String password, String url) {
         this.name = name;
         this.username = username;
         this.password = password;
@@ -28,7 +28,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Employee{" +
                 "Id=" + Id +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
@@ -75,11 +75,4 @@ public class User {
     }
 
 
-//    public List<Order> getOrders() {
-//        return orders;
-//    }
-//
-//    public void setOrders(List<Order> orders) {
-//        this.orders = orders;
-//    }
 }
