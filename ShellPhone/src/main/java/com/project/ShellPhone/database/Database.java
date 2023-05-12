@@ -1,20 +1,22 @@
 package com.project.ShellPhone.database;
 
 import com.project.ShellPhone.models.*;
-import com.project.ShellPhone.repo.CartItemsRepo;
-import com.project.ShellPhone.repo.ProductRepo;
-import com.project.ShellPhone.repo.UserRepo;
+import com.project.ShellPhone.models.Cart.CartItem;
+import com.project.ShellPhone.repo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+
 @Configuration
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
     @Bean
-    CommandLineRunner initDatabase(ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo){
+    CommandLineRunner initDatabase(ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, OrderRepo orderRepo, OrderItemsRepo orderItemsRepo){
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -41,14 +43,42 @@ public class Database {
                 User user4 = new User("minhanh", "minhanh", "name","url");
                 logger.info("insert data"+userRepo.save(user4));
                 logger.info("insert data"+userRepo.save(user1));
-                CartItems cartItems1 = new CartItems(user1, productA, 3);
-                logger.info("insert data"+cartItemsRepo.save(cartItems1));
-                CartItems cartItems2 = new CartItems(user1, productA, 3);
-                logger.info("insert data"+cartItemsRepo.save(cartItems2));
-                CartItems cartItems3 = new CartItems(user1, productB, 2);
-                logger.info("insert data"+cartItemsRepo.save(cartItems3));
-                CartItems cartItems4 = new CartItems(user3, productA, 6);
-                logger.info("insert data"+cartItemsRepo.save(cartItems4));
+                CartItem cartItem1 = new CartItem();
+                cartItem1.setUser(user1);
+                cartItem1.setProduct(productA);
+                cartItem1.setQuantity(3);
+                cartItemsRepo.save(cartItem1);
+                CartItem cartItem2 = new CartItem();
+                cartItem2.setUser(user1);
+                cartItem2.setProduct(productB);
+                cartItem2.setQuantity(5);
+                cartItemsRepo.save(cartItem2);
+                DonHang donHang = new DonHang();
+                donHang.setUser(user1);
+                Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+                donHang.setTimestamp(timeStamp);
+                orderRepo.save(donHang);
+                OrderItem orderItem1 = new OrderItem();
+                orderItem1.setDonHang(donHang);
+                orderItem1.setProduct(productC);
+                orderItem1.setQuantity(9);
+                orderItemsRepo.save(orderItem1);
+                // Them Don hang
+                DonHang donHang1 = new DonHang();
+                donHang1.setUser(user1);
+                orderRepo.save(donHang1);
+                OrderItem orderItem2 = new OrderItem();
+                orderItem2.setDonHang(donHang1);
+                orderItem2.setProduct(productB);
+                orderItem2.setQuantity(3);
+                orderItemsRepo.save(orderItem2);
+                OrderItem orderItem3 = new OrderItem();
+                orderItem3.setDonHang(donHang1);
+                orderItem3.setProduct(productA);
+                orderItem3.setQuantity(4);
+                orderItemsRepo.save(orderItem3);
+
+
             }
         };
 
