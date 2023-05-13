@@ -15,7 +15,7 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "donhang_id")
     private DonHang donHang;
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "product_id")
     @ManyToOne
     private Product product;
     private int quantity;
