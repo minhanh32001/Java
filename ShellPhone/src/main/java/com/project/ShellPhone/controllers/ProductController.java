@@ -1,8 +1,10 @@
 package com.project.ShellPhone.controllers;
 
+import com.project.ShellPhone.models.Comment;
 import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.RespondObject;
 import com.project.ShellPhone.models.Type;
+import com.project.ShellPhone.repo.CommentRepo;
 import com.project.ShellPhone.repo.ProductRepo;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class ProductController {
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private CommentRepo commentRepo;
 
     @GetMapping("")
     ResponseEntity<RespondObject> getAllProducts() {
@@ -26,6 +30,7 @@ public class ProductController {
                 new RespondObject("ok", "Get all products successfully", allProducts));
 
     }
+
 
     @GetMapping("/byType")
     ResponseEntity<RespondObject> getProductByType(@RequestParam("type") Type type) {
@@ -41,18 +46,17 @@ public class ProductController {
                 new RespondObject("ok", "Get combine products successfully", productByType));
     }
 
-    @GetMapping("/byId")
-    ResponseEntity<RespondObject> getProduct(@RequestParam Long id) {
-        Optional<Product> productFound = productRepo.findById(id);
-        return productFound.isPresent() ?
+    @GetMapping("/{id}")
+    ResponseEntity<RespondObject> getProduct(@PathVariable Long id) {
+        Optional<Product> optionalProductFound = productRepo.findById(id);
+        Product productFound = optionalProductFound.get();
+        return optionalProductFound.isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new RespondObject("ok", "found product", productFound)
-                ) :
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new RespondObject("false", "can not found", "")
-                );
-    }
-
+                        new RespondObject("ok", "found product", productFound, commentRepo.findByProduct(productFound))
+                ):
+             ResponseEntity.status(HttpStatus.OK).body(
+                    new RespondObject("ok", "product not found", ""));
+        }
     @PutMapping("/add")
     ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct, @RequestParam Long id) {
         Product updateProduct = productRepo.findById(id)

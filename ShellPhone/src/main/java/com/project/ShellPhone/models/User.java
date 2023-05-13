@@ -31,12 +31,9 @@ public class User {
         return "User{" +
                 "Id=" + Id +
                 ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", url='" + url + '\'' +
                 '}';
     }
-
 
     public Long getId() {
         return Id;
@@ -48,18 +45,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -74,12 +59,4 @@ public class User {
         this.url = url;
     }
 
-
-//    public List<Order> getOrders() {
-//        return orders;
-//    }
-//
-//    public void setOrders(List<Order> orders) {
-//        this.orders = orders;
-//    }
 }

@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
     @Bean
-    CommandLineRunner initDatabase(ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, OrderRepo orderRepo, OrderItemsRepo orderItemsRepo){
+    CommandLineRunner initDatabase(CommentRepo commentRepo, ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, OrderRepo orderRepo, OrderItemsRepo orderItemsRepo){
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -77,6 +77,24 @@ public class Database {
                 orderItem3.setProduct(productA);
                 orderItem3.setQuantity(4);
                 orderItemsRepo.save(orderItem3);
+                Comment comment1 = new Comment();
+                comment1.setUser(user1);
+                comment1.setProduct(productA);
+                comment1.setTimestamp(timeStamp);
+                comment1.setContent("Toi thay san pham nay rat la ok");
+                commentRepo.save(comment1);
+                Comment comment2 = new Comment();
+                comment2.setUser(user1);
+                comment2.setProduct(productA);
+                comment2.setTimestamp(timeStamp);
+                comment2.setContent("Toi thay san pham nay rat la ok");
+                commentRepo.save(comment2);
+                Comment comment3 = new Comment();
+                comment3.setUser(user3);
+                comment3.setProduct(productA);
+                comment3.setTimestamp(timeStamp);
+                comment3.setContent("Toi thay san pham ok");
+                commentRepo.save(comment3);
 
 
             }

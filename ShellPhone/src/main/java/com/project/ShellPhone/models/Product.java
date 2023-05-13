@@ -2,18 +2,22 @@ package com.project.ShellPhone.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "product")
 public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long productId;
+    @Column(name = "product_id")
+    private Long id;
     private String name;
     private Type type;
     private double price;
     private int discount;
     private double lastPrice;
     private int number;
+    private List<Comment> comments;
 
     @Column(name = "descr")
     private String describe;
@@ -35,7 +39,7 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + productId +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", price=" + price +
@@ -48,7 +52,7 @@ public class Product {
     }
 
     public Long getId() {
-        return productId;
+        return id;
     }
 
     public String getName() {

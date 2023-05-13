@@ -1,9 +1,14 @@
 package com.project.ShellPhone.models;
 
+import jdk.dynalink.linker.LinkerServices;
+
+import java.util.List;
+
 public class RespondObject {
     private String status;
     private String message;
     private Object data;
+    private List<Comment> comments;
 
     public RespondObject() {
     }
@@ -12,6 +17,21 @@ public class RespondObject {
         this.status = status;
         this.message = message;
         this.data = data;
+    }
+
+    public RespondObject(String status, String message, Object data, List<Comment> comments) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+        this.comments = comments;
+    }
+
+    public List<Comment> getList() {
+        return comments;
+    }
+
+    public void setList(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public String getStatus() {
