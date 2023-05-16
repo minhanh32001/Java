@@ -1,5 +1,6 @@
-package com.project.ShellPhone.models;
+package com.project.ShellPhone.models.order;
 
+import com.project.ShellPhone.models.user.User;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -25,7 +26,7 @@ public class DonHang implements Serializable {
     private boolean isExecute = false;
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = true)
-    private Employee employee;
+    private User employee;
     @Override
     public String toString() {
         return "Order{" +
@@ -54,11 +55,11 @@ public class DonHang implements Serializable {
         isExecute = execute;
     }
 
-    public Employee getEmployee() {
+    public User getEmployee() {
         return employee;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(User employee) {
         this.employee = employee;
     }
 

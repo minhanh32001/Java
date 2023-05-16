@@ -1,8 +1,8 @@
-package com.project.ShellPhone.models;
+package com.project.ShellPhone.models.order;
 
 
+import com.project.ShellPhone.models.Product;
 import jakarta.persistence.*;
-import org.aspectj.weaver.ast.Or;
 
 @Entity
 @Table(name = "order_items")

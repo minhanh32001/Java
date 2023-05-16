@@ -1,13 +1,10 @@
 package com.project.ShellPhone.controllers;
 
 
-import com.project.ShellPhone.models.Cart.CartItem;
+import com.project.ShellPhone.models.order.DonHang;
+import com.project.ShellPhone.models.order.OrderItem;
+import com.project.ShellPhone.models.user.User;
 
-import com.project.ShellPhone.models.DonHang;
-import com.project.ShellPhone.models.OrderItem;
-import com.project.ShellPhone.models.User;
-
-import com.project.ShellPhone.repo.CartServices;
 import com.project.ShellPhone.repo.OrderItemsRepo;
 import com.project.ShellPhone.repo.OrderRepo;
 import com.project.ShellPhone.repo.UserRepo;

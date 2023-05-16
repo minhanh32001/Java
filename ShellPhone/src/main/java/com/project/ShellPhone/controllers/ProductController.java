@@ -4,6 +4,7 @@ import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.RespondObject;
 import com.project.ShellPhone.models.Type;
 import com.project.ShellPhone.repo.ProductRepo;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

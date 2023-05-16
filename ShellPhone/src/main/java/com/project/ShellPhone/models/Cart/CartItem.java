@@ -1,7 +1,7 @@
 package com.project.ShellPhone.models.Cart;
 
 import com.project.ShellPhone.models.Product;
-import com.project.ShellPhone.models.User;
+import com.project.ShellPhone.models.user.User;
 import jakarta.persistence.*;
 
 @Entity

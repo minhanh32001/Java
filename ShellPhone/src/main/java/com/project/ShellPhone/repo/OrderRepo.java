@@ -1,9 +1,8 @@
 package com.project.ShellPhone.repo;
 
-import com.project.ShellPhone.models.Cart.CartItem;
-import com.project.ShellPhone.models.DonHang;
+import com.project.ShellPhone.models.order.DonHang;
 
-import com.project.ShellPhone.models.User;
+import com.project.ShellPhone.models.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
