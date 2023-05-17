@@ -15,6 +15,11 @@ Run the example of connecting to DB
 ```
 docker-compose up -d
 ```
+*you can use mysql shell by running command*
+```
+docker exec -it shellphone-db-1 mysql -p
+```
+*with password as `password`*
 
 4. Start the server using the IDE then open postman and test in localhost:8080
 ## Source Code Review
