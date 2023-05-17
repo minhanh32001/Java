@@ -1,13 +1,11 @@
 package com.project.ShellPhone.controllers;
 
-import com.project.ShellPhone.models.Comment;
 import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.RespondObject;
 import com.project.ShellPhone.models.Type;
 import com.project.ShellPhone.repo.CommentRepo;
 import com.project.ShellPhone.repo.ProductRepo;
-import jakarta.annotation.security.RolesAllowed;
-import jakarta.websocket.server.PathParam;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,21 +30,11 @@ public class ProductController {
 
     }
 
-    @RolesAllowed({"ROLE_ADMIN"})
-
     @GetMapping("/byType")
     ResponseEntity<RespondObject> getProductByType(@RequestParam("type") Type type) {
         List<Product> productByType = productRepo.findByType(type);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Get products successfully", productByType));
-    }
-    @RolesAllowed({"ROLE_USER"})
-    @GetMapping("/combine")
-    ResponseEntity<RespondObject> getMacProduct(@RequestParam("type1") Type type1, @RequestParam("type2") Type type2){
-        List<Product> productByType = productRepo.findByType(type1);
-        productByType.addAll(productRepo.findByType(type2));
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Get combine products successfully", productByType));
     }
 
     @GetMapping("/{id}")
@@ -59,9 +47,18 @@ public class ProductController {
                 ):
              ResponseEntity.status(HttpStatus.OK).body(
                     new RespondObject("ok", "product not found", ""));
-        }
-    @PutMapping("/add")
-    ResponseEntity<RespondObject> insertProduct(@RequestBody Product newProduct, @RequestParam Long id) {
+        };
+    @PostMapping("/add")
+    ResponseEntity<RespondObject> addProduct(@RequestBody @Valid Product newProduct) {
+        Product addProduct = newProduct;
+         productRepo.save(addProduct);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
+        );
+    }
+
+    @PutMapping("/{id}/update")
+    ResponseEntity<RespondObject> updateProduct(@RequestBody Product newProduct, @PathVariable("id") Long id) {
         Product updateProduct = productRepo.findById(id)
                 .map(product -> {
                     product.setName(newProduct.getName());
@@ -77,11 +74,10 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
         );
-
     }
 
-    @DeleteMapping("/delete")
-    ResponseEntity<RespondObject> deleteProduct(@RequestParam Long id) {
+    @DeleteMapping("/{id}/delete")
+    ResponseEntity<RespondObject> deleteProduct(@PathVariable("id") Long id) {
         productRepo.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Delete product Successfully", ""));
