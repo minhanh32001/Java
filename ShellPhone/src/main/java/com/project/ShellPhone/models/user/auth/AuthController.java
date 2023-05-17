@@ -32,9 +32,9 @@ public class AuthController {
 
             User user = (User) authentication.getPrincipal() ;
             String accessToken = jwtUtil.generateAccessToken(user);
-//            AuthResponse response = new AuthResponse(user.getUsername(), accessToken);
+            AuthResponse response = new AuthResponse(user.getUsername(), accessToken);
 
-            return ResponseEntity.ok().body(accessToken);
+            return ResponseEntity.ok().body(response);
 
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();

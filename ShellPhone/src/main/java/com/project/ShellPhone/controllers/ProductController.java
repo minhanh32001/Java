@@ -28,12 +28,14 @@ public class ProductController {
 
     }
 
+    @RolesAllowed({"ROLE_ADMIN"})
     @GetMapping("/byType")
     ResponseEntity<RespondObject> getProductByType(@RequestParam("type") Type type) {
         List<Product> productByType = productRepo.findByType(type);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Get products successfully", productByType));
     }
+    @RolesAllowed({"ROLE_USER"})
     @GetMapping("/combine")
     ResponseEntity<RespondObject> getMacProduct(@RequestParam("type1") Type type1, @RequestParam("type2") Type type2){
         List<Product> productByType = productRepo.findByType(type1);
