@@ -20,7 +20,11 @@ import java.util.List;
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
     @Bean
+<<<<<<< HEAD
     CommandLineRunner initDatabase(RoleRepo roleRepo, ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, OrderRepo orderRepo, OrderItemsRepo orderItemsRepo){
+=======
+    CommandLineRunner initDatabase(CommentRepo commentRepo, ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, OrderRepo orderRepo, OrderItemsRepo orderItemsRepo){
+>>>>>>> 9b95e45bf892bd5b5c746d1449c3432fcf61680c
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -81,11 +85,32 @@ public class Database {
                 orderItem3.setProduct(productA);
                 orderItem3.setQuantity(4);
                 orderItemsRepo.save(orderItem3);
+<<<<<<< HEAD
                 Role admin = new Role("ROLE_ADMIN");
                 Role editor = new Role("ROLE_EDITOR");
                 Role customer = new Role("ROLE_CUSTOMER");
 
                 roleRepo.saveAll(List.of(admin, editor, customer));
+=======
+                Comment comment1 = new Comment();
+                comment1.setUser(user1);
+                comment1.setProduct(productA);
+                comment1.setTimestamp(timeStamp);
+                comment1.setContent("Toi thay san pham nay rat la ok");
+                commentRepo.save(comment1);
+                Comment comment2 = new Comment();
+                comment2.setUser(user1);
+                comment2.setProduct(productA);
+                comment2.setTimestamp(timeStamp);
+                comment2.setContent("Toi thay san pham nay rat la ok");
+                commentRepo.save(comment2);
+                Comment comment3 = new Comment();
+                comment3.setUser(user3);
+                comment3.setProduct(productA);
+                comment3.setTimestamp(timeStamp);
+                comment3.setContent("Toi thay san pham ok");
+                commentRepo.save(comment3);
+>>>>>>> 9b95e45bf892bd5b5c746d1449c3432fcf61680c
 
 
             }
