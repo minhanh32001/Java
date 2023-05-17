@@ -3,7 +3,7 @@ package com.project.ShellPhone.controllers;
 
 import com.project.ShellPhone.models.Cart.CartItem;
 
-import com.project.ShellPhone.models.User;
+import com.project.ShellPhone.models.user.User;
 
 import com.project.ShellPhone.repo.CartServices;
 import com.project.ShellPhone.repo.UserRepo;
@@ -29,4 +29,5 @@ public class CartController {
         List<CartItem> cartItems = cartServices.cartItemList(user);
         return cartItems;
     }
+
 }

@@ -6,6 +6,7 @@ import com.project.ShellPhone.models.RespondObject;
 import com.project.ShellPhone.models.Type;
 import com.project.ShellPhone.repo.CommentRepo;
 import com.project.ShellPhone.repo.ProductRepo;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class ProductController {
 
     }
 
+    @RolesAllowed({"ROLE_ADMIN"})
 
     @GetMapping("/byType")
     ResponseEntity<RespondObject> getProductByType(@RequestParam("type") Type type) {
@@ -38,6 +40,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Get products successfully", productByType));
     }
+    @RolesAllowed({"ROLE_USER"})
     @GetMapping("/combine")
     ResponseEntity<RespondObject> getMacProduct(@RequestParam("type1") Type type1, @RequestParam("type2") Type type2){
         List<Product> productByType = productRepo.findByType(type1);

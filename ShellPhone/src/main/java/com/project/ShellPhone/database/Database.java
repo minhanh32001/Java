@@ -2,6 +2,10 @@ package com.project.ShellPhone.database;
 
 import com.project.ShellPhone.models.*;
 import com.project.ShellPhone.models.Cart.CartItem;
+import com.project.ShellPhone.models.order.DonHang;
+import com.project.ShellPhone.models.order.OrderItem;
+import com.project.ShellPhone.models.user.Role;
+import com.project.ShellPhone.models.user.User;
 import com.project.ShellPhone.repo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,14 +13,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Configuration
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
     @Bean
+<<<<<<< HEAD
+    CommandLineRunner initDatabase(RoleRepo roleRepo, ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, OrderRepo orderRepo, OrderItemsRepo orderItemsRepo){
+=======
     CommandLineRunner initDatabase(CommentRepo commentRepo, ProductRepo productRepo, UserRepo userRepo, CartItemsRepo cartItemsRepo, OrderRepo orderRepo, OrderItemsRepo orderItemsRepo){
+>>>>>>> 9b95e45bf892bd5b5c746d1449c3432fcf61680c
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -77,6 +85,13 @@ public class Database {
                 orderItem3.setProduct(productA);
                 orderItem3.setQuantity(4);
                 orderItemsRepo.save(orderItem3);
+<<<<<<< HEAD
+                Role admin = new Role("ROLE_ADMIN");
+                Role editor = new Role("ROLE_EDITOR");
+                Role customer = new Role("ROLE_CUSTOMER");
+
+                roleRepo.saveAll(List.of(admin, editor, customer));
+=======
                 Comment comment1 = new Comment();
                 comment1.setUser(user1);
                 comment1.setProduct(productA);
@@ -95,6 +110,7 @@ public class Database {
                 comment3.setTimestamp(timeStamp);
                 comment3.setContent("Toi thay san pham ok");
                 commentRepo.save(comment3);
+>>>>>>> 9b95e45bf892bd5b5c746d1449c3432fcf61680c
 
 
             }
