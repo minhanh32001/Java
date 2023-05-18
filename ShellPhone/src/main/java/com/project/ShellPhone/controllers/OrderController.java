@@ -70,13 +70,14 @@ public class OrderController {
     }
 
     @PostMapping("/themSanPham/{id}")
-    public void themSanPham(@PathVariable("id") Long id, @PathParam("quantity") int quantity) {
+    public Long themSanPham(@PathVariable("id") Long id, @PathParam("quantity") int quantity) {
         OrderItem orderItem1 = new OrderItem();
-        orderItem1.setDonHang(themDonHang());
+        DonHang donHang = themDonHang();
+        orderItem1.setDonHang(donHang);
         orderItem1.setProduct(productRepo.findById(id).get());
         orderItem1.setQuantity(quantity);
         orderItemsRepo.save(orderItem1);
-        System.out.println("da them san pham voi so luong la" + quantity);
+        return donHang.getId();
     }
 
 }
