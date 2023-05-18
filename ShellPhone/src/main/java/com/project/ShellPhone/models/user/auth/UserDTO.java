@@ -1,24 +1,18 @@
 package com.project.ShellPhone.models.user.auth;
 
 public class UserDTO {
-    private Long id;
     private String username;
+    private String url;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String username) {
-        this.id = id;
+
+    public UserDTO(String username, String url) {
         this.username = username;
+        this.url = url;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -28,4 +22,11 @@ public class UserDTO {
         this.username = username;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

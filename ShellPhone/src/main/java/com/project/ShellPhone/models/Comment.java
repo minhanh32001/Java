@@ -1,5 +1,6 @@
 package com.project.ShellPhone.models;
 
+import com.project.ShellPhone.models.user.User;
 import jakarta.persistence.*;
 
 import java.io.Serializable;

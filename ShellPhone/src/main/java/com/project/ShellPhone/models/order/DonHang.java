@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class DonHang implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id")
+    @Column(name = "donhang_id")
     private Long id;
 
     @ManyToOne

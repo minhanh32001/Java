@@ -1,6 +1,7 @@
 package com.project.ShellPhone.models.Cart;
 
 import com.project.ShellPhone.models.Product;
+import com.project.ShellPhone.models.order.OrderItem;
 import com.project.ShellPhone.models.user.User;
 import jakarta.persistence.*;
 
@@ -32,6 +33,12 @@ public class CartItem {
                 '}';
     }
 
+    public OrderItem toOrder(){
+        OrderItem orderItem = new OrderItem();
+        orderItem.setProduct(this.product);
+        orderItem.setQuantity(this.quantity);
+        return orderItem;
+    }
     public Long getId() {
         return id;
     }
