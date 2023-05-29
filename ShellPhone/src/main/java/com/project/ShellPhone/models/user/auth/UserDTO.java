@@ -11,6 +11,7 @@ public class UserDTO {
     public UserDTO(String username, String url) {
         this.username = username;
         this.url = url;
+
     }
 
 
