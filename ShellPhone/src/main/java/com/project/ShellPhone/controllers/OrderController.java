@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
-
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "api/order")
 public class OrderController {
     @Autowired

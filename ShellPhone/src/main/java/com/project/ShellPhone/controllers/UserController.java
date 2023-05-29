@@ -7,6 +7,7 @@ import com.project.ShellPhone.models.user.auth.UserService;
 import com.project.ShellPhone.repo.RoleRepo;
 import com.project.ShellPhone.repo.UserRepo;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import org.springframework.beans.BeanUtils;
 
 @RestController
 @RequestMapping(path = "api/user")
@@ -30,15 +33,56 @@ public class UserController {
         return allUsers;
 
     }
-    @PutMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody @Valid User user) {
-        Role role = roleRepo.findById(1L).get();
+    @CrossOrigin
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
+        if (userRepo.existsByUsername(user.getUsername())) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+
+        Role role = roleRepo.findById(1L).orElse(null);
+        if (role == null) {
+            return ResponseEntity.badRequest().body("Role not found");
+        }
+
         user.setRoles(Set.of(role));
         User createdUser = service.save(user);
         URI uri = URI.create("/register/" + createdUser.getId());
         UserDTO userDto = new UserDTO(createdUser.getUsername(), createdUser.getUrl());
+
         return ResponseEntity.created(uri).body(userDto);
     }
+
+
+    //        @PutMapping("/register")
+//    public ResponseEntity<?> createUser(@RequestBody @Valid User user) {
+//        Role role = roleRepo.findById(1L).get();
+//        user.setRoles(Set.of(role));
+//        User createdUser = service.save(user);
+//        URI uri = URI.create("/register/" + createdUser.getId());
+//        UserDTO userDto = new UserDTO(createdUser.getUsername(), createdUser.getUrl());
+//        return ResponseEntity.created(uri).body(userDto);
+//    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDto) {
+        Optional<User> optionalUser = userRepo.findById(id);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User existingUser = optionalUser.get();
+
+        // Sao chép các giá trị từ userDto vào existingUser, loại bỏ trường username
+        BeanUtils.copyProperties(userDto, existingUser, "username");
+
+        User updatedUser = service.save(existingUser);
+        UserDTO updatedUserDto = new UserDTO(updatedUser.getUsername(), updatedUser.getUrl());
+
+        return ResponseEntity.ok(updatedUserDto);
+    }
+
+
     @GetMapping("/myprofile")
     UserDTO getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
