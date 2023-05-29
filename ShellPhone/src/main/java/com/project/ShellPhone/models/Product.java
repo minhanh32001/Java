@@ -11,6 +11,9 @@ public class Product {
     @Id
     @Column(name = "product_id")
     private Long id;
+
+    @Column(nullable = true, length = 64)
+    private String photos;
     private String name;
     private Type type;
     private double price;

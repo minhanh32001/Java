@@ -59,13 +59,13 @@ public class ProductController {
                 ResponseEntity.status(HttpStatus.OK).body(
                         new RespondObject("ok", "found product", product.get(), commentRepo.findByProduct(product.get()))
                 ):
-             ResponseEntity.status(HttpStatus.OK).body(
-                    new RespondObject("ok", "product not found", ""));
-        };
+                ResponseEntity.status(HttpStatus.OK).body(
+                        new RespondObject("ok", "product not found", ""));
+    };
     @PostMapping("/add")
     ResponseEntity<RespondObject> addProduct(@RequestBody @Valid Product newProduct) {
         Product addProduct = newProduct;
-         productRepo.save(addProduct);
+        productRepo.save(addProduct);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
         );
@@ -109,4 +109,3 @@ public class ProductController {
                 new RespondObject("ok", "You have left a comment", comment1.getContent()));
     }
 }
-
