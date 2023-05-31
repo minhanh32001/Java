@@ -15,8 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -64,32 +66,66 @@ public class ProductController {
     };
     @PostMapping("/add")
     ResponseEntity<RespondObject> addProduct(@RequestBody @Valid Product newProduct) {
-        Product addProduct = newProduct;
-        productRepo.save(addProduct);
+        newProduct.setLastPrice(); // Tính toán giá cuối cùng
+        productRepo.save(newProduct);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
+                new RespondObject("ok", "Add product successfully", newProduct)
         );
     }
-
 
     @PutMapping("/{id}/update")
-    ResponseEntity<RespondObject> updateProduct(@RequestBody Product newProduct, @PathVariable("id") Long id) {
-        Product updateProduct = productRepo.findById(id)
-                .map(product -> {
-                    product.setName(newProduct.getName());
-                    product.setPrice(newProduct.getPrice());
-                    product.setType(newProduct.getType());
-                    product.setNumber(newProduct.getNumber());
-                    product.setUrl(newProduct.getUrl());
-                    product.setDescribe(newProduct.getDescribe());
-                    return productRepo.save(product);
-                }).orElseGet(() -> {
-                    return productRepo.save(newProduct);
-                });
+    ResponseEntity<RespondObject> updateProduct(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
+        Optional<Product> optionalProduct = productRepo.findById(id);
+        if (optionalProduct.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Product product = optionalProduct.get();
+        Field[] fields = Product.class.getDeclaredFields();
+
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            if (updates.containsKey(fieldName)) {
+                field.setAccessible(true);
+                try {
+                    Object newValue = updates.get(fieldName);
+
+                    // Xử lý trường hợp đặc biệt cho trường "type"
+                    if (fieldName.equals("type")) {
+                        Type type = Type.valueOf((String) newValue);
+                        field.set(product, type);
+                    } else {
+                        field.set(product, newValue);
+                    }
+
+                    // Tính toán lại lastPrice nếu có cập nhật discount hoặc price
+                    if (fieldName.equals("discount") || fieldName.equals("price")) {
+                        product.setLastPrice();
+                    }
+                } catch (IllegalAccessException e) {
+                    // Xử lý ngoại lệ nếu cần thiết
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Product updatedProduct = productRepo.save(product);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Update product Successfully", productRepo.save(newProduct))
+                new RespondObject("ok", "Update product successfully", updatedProduct)
         );
     }
+
+
+
+
+    private boolean isNumericField(Field field) {
+        Class<?> fieldType = field.getType();
+        return fieldType == int.class || fieldType == Integer.class || fieldType == long.class || fieldType == Long.class;
+    }
+
+
+
+
 
     @DeleteMapping("/{id}/delete")
     ResponseEntity<RespondObject> deleteProduct(@PathVariable("id") Long id) {
