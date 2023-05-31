@@ -9,6 +9,7 @@ public class RespondObject {
     private String message;
     private Object data;
     private List<Comment> comments;
+    private List<Type> types;
 
     public RespondObject() {
     }
@@ -56,5 +57,13 @@ public class RespondObject {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public List<Type> getTypes() {
+        return types;
+    }
+
+    public void setType(List<Type> types) {
+        this.types = types;
     }
 }
