@@ -25,6 +25,11 @@ public class Database {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
+                Role admin = new Role("ROLE_ADMIN");
+//                Role editor = new Role("ROLE_EDITOR");
+//                Role customer = new Role("ROLE_CUSTOMER");
+//
+//                roleRepo.saveAll(List.of(admin, editor, customer));
 //                Product productA = new Product("Ipad 16", Type.IPAD ,3000.0, 30, 300, "M1 ipad", "ShellPhone/image/ipadm1-pro.webp");
 //                Product productB = new Product("Iphone 19",Type.IPHONE, 6000.0,10, 100, "Iphone 14 promax", "ShellPhone/image/iphone14-promsx.png");
 //                Product productC = new Product("Ipad 13", Type.IPAD ,1500.0,20, 269, "Ipad mini", "ShellPhone/image/ipad-mini.webp");
