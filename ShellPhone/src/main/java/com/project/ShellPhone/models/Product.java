@@ -113,7 +113,13 @@ public class Product {
         this.discount = discount;
     }
 
+    public void setLastPrice() {
+        double roundedPrice = Math.round((this.price - (this.price * this.discount / 100)) / 10000) * 10000;
+        this.lastPrice = roundedPrice;
+    }
+
     public double getLastPrice() {
         return lastPrice;
     }
+
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -39,11 +40,21 @@ public class CartController {
     @Autowired
     private OrderRepo orderRepo;
 
+//    private User getCurrentUser() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User currentUser = (User) authentication.getPrincipal();
+//        return currentUser;
+//    }
+
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepo.findByUsername(username);
+        User currentUser = userOptional.orElse(null); // hoặc sử dụng orElseThrow() để ném ngoại lệ
         return currentUser;
     }
+
+
     @GetMapping("/mycart")
     public List<CartItem> getCart(){
         List<CartItem> cartItems = cartServices.cartItemList(getCurrentUser());
