@@ -6,6 +6,7 @@ import com.project.ShellPhone.models.user.auth.UserDTO;
 import com.project.ShellPhone.models.user.auth.UserService;
 import com.project.ShellPhone.repo.RoleRepo;
 import com.project.ShellPhone.repo.UserRepo;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +43,32 @@ public class UserController {
         if (userPresent.isPresent())
             return HttpStatus.CONFLICT;
         else {
-            Role role = roleRepo.findById(1L).get();
-            user.setRoles(Set.of(role));
-            User createdUser = service.save(user);
+            Role roleuser = roleRepo.findById(3L).get();
+            user.setRoles(Set.of(roleuser));
+            service.save(user);
             return HttpStatus.CREATED;
         }
     }
+    @CrossOrigin
+    @PutMapping("/update/{id}/role")
+    @RolesAllowed("ROLE_ADMIN")
+    public HttpStatus createUser(@PathVariable("id") Long id, @RequestParam("role") Long roleId ) {
+        User user = userRepo.findById(id).get();
+        try {
+            Role role = roleRepo.findById(roleId).get();
+            Set userRoles = user.getRoles();
+            userRoles.add(role);
+            user.setRoles(userRoles);
+            user.setAdmin();
+            userRepo.save(user);
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            return HttpStatus.BAD_REQUEST;
+
+        }
+    }
+
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDto) {

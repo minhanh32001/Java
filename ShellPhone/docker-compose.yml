@@ -11,5 +11,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - C:\\Users\\Minh Anh/mysql-data:/var/lib/docker/volumes/c26e763f1c73d2b4ab9a8b4ebeaaf85651f5dd1e262a495f9f15d90914d4535c
+      - 
+
+volumes:
+  mysql-data:
 
