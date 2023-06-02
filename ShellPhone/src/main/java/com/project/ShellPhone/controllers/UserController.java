@@ -49,6 +49,8 @@ public class UserController {
             return HttpStatus.CREATED;
         }
     }
+
+    
     @CrossOrigin
     @PutMapping("/update/{id}/role")
     @RolesAllowed("ROLE_ADMIN")

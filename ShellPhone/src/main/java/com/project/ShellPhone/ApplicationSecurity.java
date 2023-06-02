@@ -89,7 +89,6 @@ public class ApplicationSecurity {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-//                .requestMatchers("/auth/login", "/api/user/register", "/api/product/**").permitAll()
                 .requestMatchers("/api/product/1/update", "/api/product/add", "/api/products/1/delete").authenticated()
                 .requestMatchers("/api/user/myprofile", "/api/order/myorder").authenticated()
                 .anyRequest().permitAll();

@@ -3,6 +3,7 @@ package com.project.ShellPhone.controllers;
 
 import com.project.ShellPhone.models.Cart.CartItem;
 
+import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.order.DonHang;
 import com.project.ShellPhone.models.order.OrderItem;
 import com.project.ShellPhone.models.user.User;
@@ -40,19 +41,19 @@ public class CartController {
     @Autowired
     private OrderRepo orderRepo;
 
-//    private User getCurrentUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User currentUser = (User) authentication.getPrincipal();
-//        return currentUser;
-//    }
-
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> userOptional = userRepo.findByUsername(username);
-        User currentUser = userOptional.orElse(null); // hoặc sử dụng orElseThrow() để ném ngoại lệ
+        User currentUser = (User) authentication.getPrincipal();
         return currentUser;
     }
+
+//    private User getCurrentUser() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String username = authentication.getName();
+//        Optional<User> userOptional = userRepo.findByUsername(username);
+//        User currentUser = userOptional.orElse(null); // hoặc sử dụng orElseThrow() để ném ngoại lệ
+//        return currentUser;
+//    }
 
 
     @GetMapping("/mycart")
@@ -62,13 +63,23 @@ public class CartController {
     }
 
     @PostMapping("/addToCart/{id}")
-    private String addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
-        CartItem cartItem = new CartItem();
-        cartItem.setProduct(productRepo.findById(id).get());
-        cartItem.setQuantity(quantity);
-        cartItem.setUser(getCurrentUser());
-        cartItemsRepo.save(cartItem);
-        return cartItem.getId().toString();
+    private CartItem addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
+        List<CartItem> cartItemList = cartItemsRepo.findByUser(getCurrentUser());
+        Product product = productRepo.findById(id).get();
+        CartItem cartItemMoi = null;
+        for (CartItem cartItem: cartItemList){
+            if (cartItem.getProduct().getId().equals(id)){
+                cartItemMoi = cartItem;
+                cartItemMoi.setQuantity(cartItemMoi.getQuantity()+quantity);
+            }
+        }
+        if(cartItemMoi==null){
+            cartItemMoi = new CartItem();
+            cartItemMoi.setProduct(product);
+            cartItemMoi.setUser(getCurrentUser());
+            cartItemMoi.setQuantity(quantity);
+        }
+        return (cartItemsRepo.save(cartItemMoi));
     }
     @DeleteMapping("/mycart/delete")
     public ResponseEntity<String> deleteCartItemByUser() {

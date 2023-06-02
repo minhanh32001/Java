@@ -7,6 +7,7 @@ import com.project.ShellPhone.models.Type;
 import com.project.ShellPhone.models.user.User;
 import com.project.ShellPhone.repo.CommentRepo;
 import com.project.ShellPhone.repo.ProductRepo;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,7 @@ public class ProductController {
                 ResponseEntity.status(HttpStatus.OK).body(
                         new RespondObject("ok", "product not found", ""));
     };
+    @RolesAllowed("ROLE_ADMIN")
     @PostMapping("/add")
     ResponseEntity<RespondObject> addProduct(@RequestBody @Valid Product newProduct) {
         newProduct.setLastPrice(); // Tính toán giá cuối cùng
@@ -72,7 +74,7 @@ public class ProductController {
                 new RespondObject("ok", "Add product successfully", newProduct)
         );
     }
-
+    @RolesAllowed("ROLE_ADMIN")
     @PutMapping("/{id}/update")
     ResponseEntity<RespondObject> updateProduct(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
         Optional<Product> optionalProduct = productRepo.findById(id);
@@ -125,14 +127,14 @@ public class ProductController {
 
 
 
-
-
+    @RolesAllowed("ROLE_ADMIN")
     @DeleteMapping("/{id}/delete")
     ResponseEntity<RespondObject> deleteProduct(@PathVariable("id") Long id) {
         productRepo.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new RespondObject("ok", "Delete product Successfully", ""));
     }
+
 
     @PostMapping("/{id}/comment")
     ResponseEntity<RespondObject> comment(@PathVariable("id") Long id, @RequestBody @Valid Comment comment) {
