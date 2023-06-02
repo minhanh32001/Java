@@ -6,15 +6,18 @@ import com.project.ShellPhone.models.user.auth.UserDTO;
 import com.project.ShellPhone.models.user.auth.UserService;
 import com.project.ShellPhone.repo.RoleRepo;
 import com.project.ShellPhone.repo.UserRepo;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,34 +38,37 @@ public class UserController {
     }
     @CrossOrigin
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid User user) {
-        if (userRepo.existsByUsername(user.getUsername())) {
-            return ResponseEntity.badRequest().body("Username already exists");
+    public HttpStatus createUser(@RequestBody @Valid User user) {
+        Optional userPresent = userRepo.findByUsername(user.getUsername());
+        if (userPresent.isPresent())
+            return HttpStatus.CONFLICT;
+        else {
+            Role roleuser = roleRepo.findById(3L).get();
+            user.setRoles(Set.of(roleuser));
+            service.save(user);
+            return HttpStatus.CREATED;
         }
+    }
+    @CrossOrigin
+    @PutMapping("/update/{id}/role")
+    @RolesAllowed("ROLE_ADMIN")
+    public HttpStatus createUser(@PathVariable("id") Long id, @RequestParam("role") Long roleId ) {
+        User user = userRepo.findById(id).get();
+        try {
+            Role role = roleRepo.findById(roleId).get();
+            Set userRoles = user.getRoles();
+            userRoles.add(role);
+            user.setRoles(userRoles);
+            user.setAdmin();
+            userRepo.save(user);
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            return HttpStatus.BAD_REQUEST;
 
-        Role role = roleRepo.findById(1L).orElse(null);
-        if (role == null) {
-            return ResponseEntity.badRequest().body("Role not found");
         }
-
-        user.setRoles(Set.of(role));
-        User createdUser = service.save(user);
-        URI uri = URI.create("/register/" + createdUser.getId());
-        UserDTO userDto = new UserDTO(createdUser.getUsername(), createdUser.getUrl());
-
-        return ResponseEntity.created(uri).body(userDto);
     }
 
 
-    //        @PutMapping("/register")
-//    public ResponseEntity<?> createUser(@RequestBody @Valid User user) {
-//        Role role = roleRepo.findById(1L).get();
-//        user.setRoles(Set.of(role));
-//        User createdUser = service.save(user);
-//        URI uri = URI.create("/register/" + createdUser.getId());
-//        UserDTO userDto = new UserDTO(createdUser.getUsername(), createdUser.getUrl());
-//        return ResponseEntity.created(uri).body(userDto);
-//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDto) {

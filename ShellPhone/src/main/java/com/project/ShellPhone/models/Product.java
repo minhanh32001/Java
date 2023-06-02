@@ -20,7 +20,6 @@ public class Product {
     private int discount;
     private double lastPrice;
     private int number;
-    private List<Comment> comments;
 
     @Column(name = "descr")
     private String describe;

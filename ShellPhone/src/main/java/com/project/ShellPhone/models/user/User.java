@@ -41,8 +41,13 @@ public class User implements UserDetails {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setAdmin() {
+        for(Role role: roles){
+            if(role.getName().equals(("ROLE_ADMIN"))){
+                this.isAdmin = true;
+                break;
+            }
+        }
     }
 
 
