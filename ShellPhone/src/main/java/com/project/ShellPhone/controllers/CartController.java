@@ -90,7 +90,7 @@ public class CartController {
     public Long makeOrder(){
         List<CartItem> cart = getCart();
         List<OrderItem> orderItems = new ArrayList<>();
-        DonHang donHang = new DonHang();
+        final DonHang donHang = new DonHang();
         donHang.setUser(getCurrentUser());
         donHang.setTimestamp(new Timestamp(System.currentTimeMillis()));
         orderRepo.save(donHang);

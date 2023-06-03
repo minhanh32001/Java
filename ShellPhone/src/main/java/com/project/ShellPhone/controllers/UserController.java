@@ -2,10 +2,11 @@ package com.project.ShellPhone.controllers;
 
 import com.project.ShellPhone.models.user.Role;
 import com.project.ShellPhone.models.user.User;
-import com.project.ShellPhone.models.user.auth.UserDTO;
+import com.project.ShellPhone.models.DTO.UserDTO;
 import com.project.ShellPhone.models.user.auth.UserService;
 import com.project.ShellPhone.repo.RoleRepo;
 import com.project.ShellPhone.repo.UserRepo;
+import com.project.ShellPhone.service.MappingService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -16,23 +17,22 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.springframework.beans.BeanUtils;
 
 @RestController
 @RequestMapping(path = "api/user")
 public class UserController {
     @Autowired private UserService service;
+    @Autowired private MappingService mappingService;
     @Autowired private RoleRepo roleRepo;
     @Autowired
     private UserRepo userRepo;
-    @GetMapping("")
+
+    @GetMapping("/allUser")
     List getAllUsers(){
-        List<User> allUsers = userRepo.findAll();
+        List<UserDTO> allUsers = mappingService.getAllUsers();
         return allUsers;
 
     }
@@ -85,7 +85,7 @@ public class UserController {
         BeanUtils.copyProperties(userDto, existingUser, "username");
 
         User updatedUser = service.save(existingUser);
-        UserDTO updatedUserDto = new UserDTO(updatedUser.getUsername(), updatedUser.getUrl());
+        UserDTO updatedUserDto = new UserDTO(getCurrentUser().getId(), updatedUser.getUsername(), updatedUser.getName(), updatedUser.isAdmin(), updatedUser.getUrl());
 
         return ResponseEntity.ok(updatedUserDto);
     }
@@ -95,8 +95,7 @@ public class UserController {
     UserDTO getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        UserDTO userDto = new UserDTO(currentUser.getUsername(), currentUser.getUrl());
-        return userDto;
+        return mappingService.getUser(currentUser);
     }
 
 }

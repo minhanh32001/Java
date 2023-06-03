@@ -1,6 +1,7 @@
 package com.project.ShellPhone.controllers;
 
 
+import com.project.ShellPhone.models.DTO.OrderDTO;
 import com.project.ShellPhone.models.order.DonHang;
 import com.project.ShellPhone.models.order.OrderItem;
 import com.project.ShellPhone.models.user.User;
@@ -9,6 +10,7 @@ import com.project.ShellPhone.repo.OrderItemsRepo;
 import com.project.ShellPhone.repo.OrderRepo;
 import com.project.ShellPhone.repo.ProductRepo;
 import com.project.ShellPhone.repo.UserRepo;
+import com.project.ShellPhone.service.MappingService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -33,6 +35,8 @@ public class OrderController {
 
     @Autowired
     private ProductRepo productRepo;
+    @Autowired
+    private MappingService mappingService;
 
 
     private User getCurrentUser() {
@@ -42,15 +46,15 @@ public class OrderController {
     }
 
     @GetMapping("/allOrder")
-    public List<DonHang> showAllOrder() {
-        List<DonHang> allOrder = orderRepo.findAll();
+    public List<OrderDTO> showAllOrder() {
+        List<OrderDTO> allOrder = mappingService.getAllOrder();
         return allOrder;
     }
 
     @GetMapping("/myorder")
-    public List<DonHang> showOrderByUser() {
-        List<DonHang> donHang = orderRepo.findByUser(getCurrentUser());
-        return donHang;
+    public List<OrderDTO> showOrderByUser() {
+        List<OrderDTO> ordersOfUser = mappingService.getOrdersByUser(getCurrentUser());
+        return ordersOfUser;
     }
 
     @GetMapping("/myorder/{maDonHang}")
@@ -60,23 +64,23 @@ public class OrderController {
         return orderItems;
     }
 
-    @PostMapping("/taoDonHang")
-    public DonHang themDonHang() {
+
+    private DonHang themDonHang() {
         DonHang donHang = new DonHang();
         donHang.setUser(getCurrentUser());
         donHang.setTimestamp(new Timestamp(System.currentTimeMillis()));
-        orderRepo.save(donHang);
         return donHang;
     }
 
     @PostMapping("/themSanPham/{id}")
     public Long themSanPham(@PathVariable("id") Long id, @PathParam("quantity") int quantity) {
-        OrderItem orderItem1 = new OrderItem();
-        DonHang donHang = themDonHang();
-        orderItem1.setDonHang(donHang);
-        orderItem1.setProduct(productRepo.findById(id).get());
-        orderItem1.setQuantity(quantity);
-        orderItemsRepo.save(orderItem1);
+        OrderItem orderItem = new OrderItem(); // Tạo đối tượng order_item mới
+        DonHang donHang = themDonHang(); // Tạo 1 đơn hàng có sẵn người dùng và thời gian, thằng này chưa được lưu nên chưa có id
+        orderItem.setDonHang(donHang); // set đơn hàng cho order_item, thằng này không thể set vì thằng trên ch
+        orderItem.setProduct(productRepo.findById(id).get()); // set product cho order_item
+        orderItem.setQuantity(quantity); // set quantity cho order item
+        orderRepo.save(donHang); // lưu lại cái thằng đơn hàng
+        orderItemsRepo.save(orderItem);
         return donHang.getId();
     }
 
