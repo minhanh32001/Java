@@ -21,7 +21,11 @@ public class CartItem {
     private Product product;
     private int quantity;
 
-    public CartItem() {
+    @Transient
+    private double total;
+
+    public CartItem(){}
+    public CartItem(User user, Product product, int quantity) {
     }
 
     @Override
@@ -65,5 +69,10 @@ public class CartItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getTotal() {
+        this.total =  this.product.getLastPrice() * this.quantity;
+        return total;
     }
 }

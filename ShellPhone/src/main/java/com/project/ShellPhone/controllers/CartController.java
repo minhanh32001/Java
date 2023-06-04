@@ -1,25 +1,26 @@
 package com.project.ShellPhone.controllers;
 
 
+import com.project.ShellPhone.models.Cart.Cart;
 import com.project.ShellPhone.models.Cart.CartItem;
 
+import com.project.ShellPhone.models.DTO.CartItemsDTO;
 import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.order.DonHang;
 import com.project.ShellPhone.models.order.OrderItem;
 import com.project.ShellPhone.models.user.User;
 
 import com.project.ShellPhone.repo.*;
+import com.project.ShellPhone.service.DTOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -37,6 +38,8 @@ public class CartController {
 
     @Autowired
     private OrderItemsRepo orderItemsRepo;
+    @Autowired
+    private DTOService dtoService;
 
     @Autowired
     private OrderRepo orderRepo;
@@ -47,23 +50,14 @@ public class CartController {
         return currentUser;
     }
 
-//    private User getCurrentUser() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = authentication.getName();
-//        Optional<User> userOptional = userRepo.findByUsername(username);
-//        User currentUser = userOptional.orElse(null); // hoặc sử dụng orElseThrow() để ném ngoại lệ
-//        return currentUser;
-//    }
-
 
     @GetMapping("/mycart")
-    public List<CartItem> getCart(){
-        List<CartItem> cartItems = cartServices.cartItemList(getCurrentUser());
-        return cartItems;
+    public List<CartItemsDTO> getCart(){
+        return dtoService.getCartItems(cartServices.cartItemList(getCurrentUser()));
     }
 
     @PostMapping("/addToCart/{id}")
-    private CartItem addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
+    private String addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
         List<CartItem> cartItemList = cartItemsRepo.findByUser(getCurrentUser());
         Product product = productRepo.findById(id).get();
         CartItem cartItemMoi = null;
@@ -74,12 +68,10 @@ public class CartController {
             }
         }
         if(cartItemMoi==null){
-            cartItemMoi = new CartItem();
-            cartItemMoi.setProduct(product);
-            cartItemMoi.setUser(getCurrentUser());
-            cartItemMoi.setQuantity(quantity);
+            cartItemMoi = new CartItem(getCurrentUser(), product, quantity);
         }
-        return (cartItemsRepo.save(cartItemMoi));
+        cartItemsRepo.save(cartItemMoi);
+        return ("Thêm sản phẩm vào giỏ hành thành công");
     }
     @DeleteMapping("/mycart/delete")
     public ResponseEntity<String> deleteCartItemByUser() {
@@ -88,7 +80,7 @@ public class CartController {
     }
     @PostMapping("/mycart/makeorder")
     public Long makeOrder(){
-        List<CartItem> cart = getCart();
+        List<CartItem> cart = cartServices.cartItemList(getCurrentUser());
         List<OrderItem> orderItems = new ArrayList<>();
         final DonHang donHang = new DonHang();
         donHang.setUser(getCurrentUser());

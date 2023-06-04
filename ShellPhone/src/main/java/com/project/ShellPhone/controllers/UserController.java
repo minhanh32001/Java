@@ -6,7 +6,7 @@ import com.project.ShellPhone.models.DTO.UserDTO;
 import com.project.ShellPhone.models.user.auth.UserService;
 import com.project.ShellPhone.repo.RoleRepo;
 import com.project.ShellPhone.repo.UserRepo;
-import com.project.ShellPhone.service.MappingService;
+import com.project.ShellPhone.service.DTOService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -25,17 +25,17 @@ import java.util.Set;
 @RequestMapping(path = "api/user")
 public class UserController {
     @Autowired private UserService service;
-    @Autowired private MappingService mappingService;
+    @Autowired private DTOService mappingService;
     @Autowired private RoleRepo roleRepo;
     @Autowired
     private UserRepo userRepo;
 
     @GetMapping("/allUser")
     List getAllUsers(){
-        List<UserDTO> allUsers = mappingService.getAllUsers();
-        return allUsers;
-
+        List<User> allUsers = userRepo.findAll();
+        return mappingService.getAllUsersDTO(allUsers);
     }
+
     @CrossOrigin
     @PostMapping("/register")
     public HttpStatus createUser(@RequestBody @Valid User user) {
@@ -95,9 +95,8 @@ public class UserController {
     UserDTO getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        return mappingService.getUser(currentUser);
+        return mappingService.convertUserIntoDTO(currentUser);
     }
-
 }
 
 

@@ -2,6 +2,7 @@ package com.project.ShellPhone.controllers;
 
 
 import com.project.ShellPhone.models.DTO.OrderDTO;
+import com.project.ShellPhone.models.DTO.OrdersIteamsDTO;
 import com.project.ShellPhone.models.order.DonHang;
 import com.project.ShellPhone.models.order.OrderItem;
 import com.project.ShellPhone.models.user.User;
@@ -10,7 +11,7 @@ import com.project.ShellPhone.repo.OrderItemsRepo;
 import com.project.ShellPhone.repo.OrderRepo;
 import com.project.ShellPhone.repo.ProductRepo;
 import com.project.ShellPhone.repo.UserRepo;
-import com.project.ShellPhone.service.MappingService;
+import com.project.ShellPhone.service.DTOService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,12 +32,9 @@ public class OrderController {
     @Autowired
     private OrderRepo orderRepo;
     @Autowired
-    private UserRepo userRepo;
-
-    @Autowired
     private ProductRepo productRepo;
     @Autowired
-    private MappingService mappingService;
+    private DTOService dtoService;
 
 
     private User getCurrentUser() {
@@ -46,22 +44,22 @@ public class OrderController {
     }
 
     @GetMapping("/allOrder")
-    public List<OrderDTO> showAllOrder() {
-        List<OrderDTO> allOrder = mappingService.getAllOrder();
-        return allOrder;
+    public List<OrderDTO> getAllOrder() {
+        List<DonHang> allOrders = orderRepo.findAll();
+        return dtoService.getOrders(allOrders);
     }
 
     @GetMapping("/myorder")
     public List<OrderDTO> showOrderByUser() {
-        List<OrderDTO> ordersOfUser = mappingService.getOrdersByUser(getCurrentUser());
-        return ordersOfUser;
+        List<DonHang> allUserOrders = orderRepo.findByUser(getCurrentUser());
+        return dtoService.getOrders(allUserOrders);
     }
 
-    @GetMapping("/myorder/{maDonHang}")
-    public List<OrderItem> showAOrderById(@PathVariable("maDonHang") Long maDonHang) {
-        DonHang donHang = orderRepo.findById(maDonHang).get();
+    @GetMapping("/myorder/{orderId}")
+    public List<OrdersIteamsDTO> showAOrderById(@PathVariable("orderId") Long orderId) {
+        DonHang donHang = orderRepo.findById(orderId).get();
         List<OrderItem> orderItems = orderItemsRepo.findByDonHang(donHang);
-        return orderItems;
+        return dtoService.getOrdersItems(orderItems);
     }
 
 
