@@ -2,6 +2,7 @@ package com.project.ShellPhone.controllers;
 
 
 import com.project.ShellPhone.models.DTO.OrderDTO;
+import com.project.ShellPhone.models.DTO.OrderItemDTO;
 import com.project.ShellPhone.models.DTO.OrdersIteamsDTO;
 import com.project.ShellPhone.models.order.DonHang;
 import com.project.ShellPhone.models.order.OrderItem;
@@ -56,10 +57,12 @@ public class OrderController {
     }
 
     @GetMapping("/myorder/{orderId}")
-    public List<OrdersIteamsDTO> showAOrderById(@PathVariable("orderId") Long orderId) {
+    public OrderItemDTO showAOrderById(@PathVariable("orderId") Long orderId) {
         DonHang donHang = orderRepo.findById(orderId).get();
         List<OrderItem> orderItems = orderItemsRepo.findByDonHang(donHang);
-        return dtoService.getOrdersItems(orderItems);
+        OrderItemDTO orderItemDTO = new OrderItemDTO(dtoService.getOrdersItems(orderItems));
+        orderItemDTO.setOrderItemId(donHang.getId());
+        return orderItemDTO;
     }
 
 

@@ -26,6 +26,9 @@ public class CartItem {
 
     public CartItem(){}
     public CartItem(User user, Product product, int quantity) {
+        this.user = user;
+        this.product =product;
+        this.quantity = quantity;
     }
 
     @Override

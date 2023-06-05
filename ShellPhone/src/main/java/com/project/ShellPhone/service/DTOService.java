@@ -85,7 +85,7 @@ public class DTOService {
     // Orders_items
     public List<OrdersIteamsDTO> getOrdersItems(List<OrderItem> orderItemList) {
         List<OrdersIteamsDTO> allOrdersItems = new ArrayList<>();
-        for (OrderItem orderItem : orderItemList){
+        for (OrderItem orderItem :  orderItemList){
             allOrdersItems.add(this.convertOrdersItemsIntoDTO(orderItem));
         }
         return allOrdersItems;

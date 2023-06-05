@@ -4,7 +4,7 @@ public class OrdersIteamsDTO {
     private Long id;
     private ProductDTO product;
     private int quantity;
-
+    private double orderItemtotal;
     public OrdersIteamsDTO() {
     }
 
@@ -18,6 +18,15 @@ public class OrdersIteamsDTO {
 
     public ProductDTO getProduct() {
         return product;
+    }
+
+    public double getOrderItemtotal() {
+        this.setOrderItemtotal();
+        return orderItemtotal;
+    }
+
+    public void setOrderItemtotal() {
+        this.orderItemtotal = this.product.getProductLastPrice() * this.quantity ;
     }
 
     public void setProduct(ProductDTO product) {

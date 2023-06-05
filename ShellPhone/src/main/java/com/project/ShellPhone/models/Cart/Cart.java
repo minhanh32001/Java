@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
-    @Autowired
-    private DTOService dtoService;
     private List<CartItemsDTO> cartItemsDTOList;
-    private double total;
+    private double totalCart;
 
-    public Cart(List<CartItem> cartItemList) {
-        this.cartItemsDTOList = dtoService.getCartItems(cartItemList);
-        for (CartItem cartItem: cartItemList)
-            this.total += cartItem.getTotal();
+    public Cart(List<CartItemsDTO> cartItemsDTOList) {
+        this.cartItemsDTOList = cartItemsDTOList;
+        for (CartItemsDTO cartItemsDTO: this.cartItemsDTOList)
+            this.totalCart += cartItemsDTO.getTotal();
         }
 
     public List<CartItemsDTO> getCartItemList() {
@@ -23,6 +21,6 @@ public class Cart {
     }
 
     public double getTotal() {
-        return total;
+        return totalCart;
     }
 }

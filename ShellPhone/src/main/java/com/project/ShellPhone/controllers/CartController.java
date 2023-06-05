@@ -52,12 +52,14 @@ public class CartController {
 
 
     @GetMapping("/mycart")
-    public List<CartItemsDTO> getCart(){
-        return dtoService.getCartItems(cartServices.cartItemList(getCurrentUser()));
+    public Cart getCart(){
+        List<CartItemsDTO> cartItems = dtoService.getCartItems(cartServices.cartItemList(getCurrentUser()));
+        Cart cart = new Cart(cartItems);
+        return cart;
     }
 
     @PostMapping("/addToCart/{id}")
-    private String addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
+    private CartItem addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
         List<CartItem> cartItemList = cartItemsRepo.findByUser(getCurrentUser());
         Product product = productRepo.findById(id).get();
         CartItem cartItemMoi = null;
@@ -70,8 +72,7 @@ public class CartController {
         if(cartItemMoi==null){
             cartItemMoi = new CartItem(getCurrentUser(), product, quantity);
         }
-        cartItemsRepo.save(cartItemMoi);
-        return ("Thêm sản phẩm vào giỏ hành thành công");
+        return (cartItemsRepo.save(cartItemMoi));
     }
     @DeleteMapping("/mycart/delete")
     public ResponseEntity<String> deleteCartItemByUser() {
@@ -82,7 +83,7 @@ public class CartController {
     public Long makeOrder(){
         List<CartItem> cart = cartServices.cartItemList(getCurrentUser());
         List<OrderItem> orderItems = new ArrayList<>();
-        final DonHang donHang = new DonHang();
+        DonHang donHang = new DonHang();
         donHang.setUser(getCurrentUser());
         donHang.setTimestamp(new Timestamp(System.currentTimeMillis()));
         orderRepo.save(donHang);
