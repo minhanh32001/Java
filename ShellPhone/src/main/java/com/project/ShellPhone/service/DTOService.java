@@ -55,7 +55,7 @@ public class DTOService {
         OrderDTO dto = new OrderDTO();
         dto.setId(donHangData.getId());
         dto.setUserId(donHangData.getUser().getId());
-        dto.setUserUserName(donHangData.getUser().getName());
+        dto.setUserUserName(donHangData.getUser().getUsername());
         dto.setTimestamp(donHangData.getTimestamp());
         dto.setExecute(donHangData.isExecute());
         dto.setIssued(donHangData.isIssued());
