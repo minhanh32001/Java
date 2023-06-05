@@ -112,4 +112,11 @@ public class DTOService {
 
         return productDTO;
     }
+    public List<ProductDTO> getProducts(List<Product> products) {
+        List<ProductDTO> allProductItems = new ArrayList<>();
+        for (Product product :  products){
+            allProductItems.add(this.convertProductIntoDTO(product));
+        }
+        return allProductItems;
+    }
 }
