@@ -59,7 +59,7 @@ public class CartController {
     }
 
     @PostMapping("/addToCart/{id}")
-    private CartItem addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
+    private CartItem addToCart(@PathVariable("id") Long id, @RequestParam(name = "quantity", defaultValue = "1") int quantity){
         List<CartItem> cartItemList = cartItemsRepo.findByUser(getCurrentUser());
         Product product = productRepo.findById(id).get();
         CartItem cartItemMoi = null;

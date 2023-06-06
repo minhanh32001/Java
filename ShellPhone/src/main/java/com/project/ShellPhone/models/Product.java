@@ -37,20 +37,6 @@ public class Product {
         this.url = url;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                ", price=" + price +
-                ", discount=" + discount +
-                ", lastPrice=" + lastPrice +
-                ", number=" + number +
-                ", describe='" + describe + '\'' +
-                ", url='" + url + '\'' +
-                '}';
-    }
 
     public Long getId() {
         return id;

@@ -88,11 +88,13 @@ public class ApplicationSecurity {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests()
-                .requestMatchers("/api/product/1/update", "/api/product/add", "/api/products/1/delete").authenticated()
-                .requestMatchers("/api/user/myprofile", "/api/order/myorder").authenticated()
-                .anyRequest().permitAll();
-
+        http
+                .authorizeRequests()
+                    .requestMatchers("/api/product/1/update", "/api/product/add", "/api/products/1/delete").authenticated()
+                    .requestMatchers("/api/user/myprofile", "/api/order/myorder").authenticated()
+                    .anyRequest().permitAll()
+                    .and()
+                .logout().clearAuthentication(true).logoutSuccessUrl("/api/product").logoutUrl("/auth/logout").deleteCookies("JSESSIONID");
         http.exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> {
