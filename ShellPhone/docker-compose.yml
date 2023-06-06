@@ -1,6 +1,7 @@
 version: '3'
 services:
   db:
+    container_name: mysql_java
     image: mysql:latest
 
     environment:
@@ -11,8 +12,11 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - 
-
+      - mysql_backup_volume:/var/lib/mysql
 volumes:
-  mysql-data:
+  mysql_backup_volume:
+    external:
+      name: c4472d530ba54f4f9c2704f72c8d5cd72618ce37d1d6b9cff5c1235e545f7006
+
+
 

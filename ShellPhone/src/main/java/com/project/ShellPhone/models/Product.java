@@ -32,7 +32,6 @@ public class Product {
         this.type = type;
         this.price = price;
         this.discount = discount;
-        this.lastPrice = this.price-this.price*this.discount/100;
         this.number = number;
         this.describe = describe;
         this.url = url;
@@ -119,7 +118,7 @@ public class Product {
     }
 
     public double getLastPrice() {
+        this.setLastPrice();
         return lastPrice;
     }
-
 }
