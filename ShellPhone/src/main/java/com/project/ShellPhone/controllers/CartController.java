@@ -75,6 +75,23 @@ public class CartController {
         }
         return (cartItemsRepo.save(cartItemMoi));
     }
+
+    // Update quantity
+    @PutMapping("/mycart/update/{id}")
+    public CartItem updateCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
+        Optional<CartItem> cartItemOptional = cartItemsRepo.findById(id);
+
+        if (cartItemOptional.isPresent()) {
+            CartItem cartItem = cartItemOptional.get();
+            cartItem.setQuantity(quantity);
+            return cartItemsRepo.save(cartItem);
+        } else {
+            // Không tìm thấy cart item với id tương ứng
+            throw new NoSuchElementException("Không tìm thấy cart item với id: " + id);
+        }
+    }
+
+
     @DeleteMapping("/mycart/delete")
     public ResponseEntity<String> deleteCartItemByUser() {
         cartServices.deleteCartItemByUser(getCurrentUser());
@@ -100,6 +117,7 @@ public class CartController {
     }
     @PostMapping("/mycart/makeorder")
     public Long makeOrder(@RequestBody Address address){
+
         List<CartItem> cart = cartServices.cartItemList(getCurrentUser());
         List<OrderItem> orderItems = new ArrayList<>();
         DonHang donHang = new DonHang();

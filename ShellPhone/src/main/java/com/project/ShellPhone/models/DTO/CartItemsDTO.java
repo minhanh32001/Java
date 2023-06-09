@@ -9,7 +9,6 @@ public class CartItemsDTO {
 
     public CartItemsDTO() {
     }
-
     public Long getId() {
         return id;
     }
@@ -17,7 +16,6 @@ public class CartItemsDTO {
     public void setId(Long id) {
         this.id = id;
     }
-
     public ProductDTO getProduct() {
         return product;
     }
