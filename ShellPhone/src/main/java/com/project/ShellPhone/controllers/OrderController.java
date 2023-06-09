@@ -78,7 +78,7 @@ public class OrderController {
     }
 
     @PostMapping("/muangay")
-    public Long themSanPham(@RequestParam("id") Long id, @RequestParam(name ="quantity", defaultValue = "1") int quantity, @RequestBody Address address) {
+    public String themSanPham(@RequestParam("productId") Long id, @RequestParam(name ="quantity", defaultValue = "1") int quantity, @RequestBody Address address) {
         OrderItem orderItem = new OrderItem();
         DonHang donHang = themDonHang();
         donHang.setAddress(address.getAddress());
@@ -89,7 +89,7 @@ public class OrderController {
         orderItem.setQuantity(quantity);
         orderRepo.save(donHang);
         orderItemsRepo.save(orderItem);
-        return donHang.getId();
+        return ("Đã tạo đơn hàng mới, mã đơn hàng: " + donHang.getId());
     }
 
 }

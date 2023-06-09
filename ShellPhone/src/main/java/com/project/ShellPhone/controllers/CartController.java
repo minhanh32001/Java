@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -116,8 +118,7 @@ public class CartController {
         return ResponseEntity.ok("Đã cập nhật giỏ hàng.");
     }
     @PostMapping("/mycart/makeorder")
-    public Long makeOrder(@RequestBody Address address){
-
+    public String makeOrder(@RequestBody Address address){
         List<CartItem> cart = cartServices.cartItemList(getCurrentUser());
         List<OrderItem> orderItems = new ArrayList<>();
         DonHang donHang = new DonHang();
@@ -135,6 +136,6 @@ public class CartController {
             orderItemsRepo.save(orderItem);
         }
         deleteCartItemByUser();
-        return donHang.getId();
+        return ("Đã tạo đơn hàng mới, mã đơn hàng: " + donHang.getId());
     }
 }
