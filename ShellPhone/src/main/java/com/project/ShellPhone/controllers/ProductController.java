@@ -1,15 +1,21 @@
 package com.project.ShellPhone.controllers;
 
 import com.project.ShellPhone.models.Comment;
+import com.project.ShellPhone.models.DTO.ProductDTO;
 import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.RespondObject;
 import com.project.ShellPhone.models.Type;
 import com.project.ShellPhone.models.user.User;
 import com.project.ShellPhone.repo.CommentRepo;
 import com.project.ShellPhone.repo.ProductRepo;
+import com.project.ShellPhone.service.DTOService;
+
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,6 +34,8 @@ public class ProductController {
     @Autowired
     private ProductRepo productRepo;
     @Autowired
+    private DTOService dtoService;
+    @Autowired
     private CommentRepo commentRepo;
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,11 +44,11 @@ public class ProductController {
     }
 
     @GetMapping("")
-    ResponseEntity<RespondObject> getAllProducts() {
-        List<Product> allProducts = productRepo.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new RespondObject("ok", "Get all products successfully", allProducts));
-
+    List<ProductDTO> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 15);
+        Page<Product> productPage = productRepo.findAll(pageable);
+        List<ProductDTO> products = dtoService.getProducts(productPage.getContent());
+        return products;
     }
 
     @GetMapping("/byType")
@@ -60,7 +68,7 @@ public class ProductController {
         Optional<Product> product = getProductById(id);
         return getProductById(id).isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new RespondObject("ok", "found product", product.get(), commentRepo.findByProduct(product.get()))
+                        new RespondObject("ok", "found product", dtoService.convertProductIntoDTO(product.get()), commentRepo.findByProduct(product.get()))
                 ):
                 ResponseEntity.status(HttpStatus.OK).body(
                         new RespondObject("ok", "product not found", ""));

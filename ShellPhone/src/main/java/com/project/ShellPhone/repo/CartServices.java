@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,5 +22,13 @@ public class CartServices {
 
     public void deleteCartItemByUser(User user) {
         cartItemsRepo.deleteByUser(user);
+    }
+    public void deleteCartItemById(Long id){cartItemsRepo.deleteById(id);}
+    public void updateQuantity(Long itemId, int quantity) {
+        Optional<CartItem> optionalItem = cartItemsRepo.findById(itemId);
+        optionalItem.ifPresent(item -> {
+            item.setQuantity(quantity);
+            cartItemsRepo.save(item);
+        });
     }
 }

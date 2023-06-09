@@ -1,13 +1,21 @@
 package com.project.ShellPhone.models.DTO;
 
 public class CartItemsDTO {
+
+    private Long id;
     private ProductDTO product;
     private int quantity;
     private double total;
 
     public CartItemsDTO() {
     }
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
     public ProductDTO getProduct() {
         return product;
     }

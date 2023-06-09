@@ -1,6 +1,7 @@
 package com.project.ShellPhone.controllers;
 
 
+import com.project.ShellPhone.models.Address;
 import com.project.ShellPhone.models.Cart.Cart;
 import com.project.ShellPhone.models.Cart.CartItem;
 
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -61,7 +60,7 @@ public class CartController {
     }
 
     @PostMapping("/addToCart/{id}")
-    private CartItem addToCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity){
+    private CartItem addToCart(@PathVariable("id") Long id, @RequestParam(name = "quantity", defaultValue = "1") int quantity){
         List<CartItem> cartItemList = cartItemsRepo.findByUser(getCurrentUser());
         Product product = productRepo.findById(id).get();
         CartItem cartItemMoi = null;
@@ -96,13 +95,35 @@ public class CartController {
     @DeleteMapping("/mycart/delete")
     public ResponseEntity<String> deleteCartItemByUser() {
         cartServices.deleteCartItemByUser(getCurrentUser());
-        return ResponseEntity.ok("Sản phẩm đã được xóa khỏi giỏ hàng.");
+        return ResponseEntity.ok("Toàn bộ sản phẩm đã được xóa khỏi giỏ hàng.");
+    }
+    @DeleteMapping("mycart/delete/{id}")
+    public ResponseEntity<String> deleteAnItem(@PathVariable("id") Long id){
+        cartServices.deleteCartItemById(id);
+        return ResponseEntity.ok("Đã xóa sản phẩm này khỏi giỏ hàng");
+    }
+
+    @PutMapping("/updateItems")
+    public ResponseEntity<String> updateItemsInCart(@RequestBody List<CartItem> items) {
+        for (CartItem item : items) {
+            if(item.getQuantity()<1){
+                this.deleteAnItem(item.getId());
+            }
+            else{
+                cartServices.updateQuantity(item.getId(), item.getQuantity());
+        }
+        }
+        return ResponseEntity.ok("Đã cập nhật giỏ hàng.");
     }
     @PostMapping("/mycart/makeorder")
-    public Long makeOrder(){
+    public Long makeOrder(@RequestBody Address address){
+
         List<CartItem> cart = cartServices.cartItemList(getCurrentUser());
         List<OrderItem> orderItems = new ArrayList<>();
         DonHang donHang = new DonHang();
+        donHang.setAddress(address.getAddress());
+        donHang.setPhoneNumber(address.getPhoneNumber());
+        donHang.setTenNguoiNhan(address.getReceiveName());
         donHang.setUser(getCurrentUser());
         donHang.setTimestamp(new Timestamp(System.currentTimeMillis()));
         orderRepo.save(donHang);
