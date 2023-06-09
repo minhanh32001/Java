@@ -59,6 +59,9 @@ public class DTOService {
         dto.setTimestamp(donHangData.getTimestamp());
         dto.setExecute(donHangData.isExecute());
         dto.setIssued(donHangData.isIssued());
+        dto.setDiaChi(donHangData.getAddress());
+        dto.setSoDienThoai(donHangData.getPhoneNumber());
+        dto.setTenNguoiNhan(donHangData.getTenNguoiNhan());
         if(donHangData.getEmployee() != null){
             dto.setEmployeeId(donHangData.getEmployee().getId());
             dto.setEmployeeName(donHangData.getEmployee().getName());
@@ -76,6 +79,7 @@ public class DTOService {
     }
     public CartItemsDTO convertCartItemIntoDTO(CartItem cartItem) {
         CartItemsDTO dto = new CartItemsDTO();
+        dto.setId(cartItem.getId());
         dto.setProduct(this.convertProductIntoDTO(cartItem.getProduct()));
         dto.setQuantity(cartItem.getQuantity());
         return dto;

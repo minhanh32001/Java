@@ -1,8 +1,9 @@
 package com.project.ShellPhone.controllers;
 
 
+import com.project.ShellPhone.models.Address;
 import com.project.ShellPhone.models.DTO.OrderDTO;
-import com.project.ShellPhone.models.DTO.OrderItemDTO;
+import com.project.ShellPhone.models.DTO.OrderInnerDTO;
 import com.project.ShellPhone.models.order.DonHang;
 import com.project.ShellPhone.models.order.OrderItem;
 import com.project.ShellPhone.models.user.User;
@@ -40,6 +41,7 @@ public class OrderController {
         return currentUser;
     }
 
+
     @GetMapping("/allOrder")
     public List<OrderDTO> getAllOrder() {
         List<DonHang> allOrders = orderRepo.findAll();
@@ -53,12 +55,12 @@ public class OrderController {
     }
 
     @GetMapping("/myorder/{orderId}")
-    public OrderItemDTO showAOrderById(@PathVariable("orderId") Long orderId) {
+    public OrderInnerDTO showAOrderById(@PathVariable("orderId") Long orderId) {
         DonHang donHang = orderRepo.findById(orderId).get();
         List<OrderItem> orderItems = orderItemsRepo.findByDonHang(donHang);
-        OrderItemDTO orderItemDTO = new OrderItemDTO(dtoService.getOrdersItems(orderItems));
-        orderItemDTO.setOrderItemId(donHang.getId());
-        return orderItemDTO;
+        OrderInnerDTO orderInnerDTO = new OrderInnerDTO(dtoService.getOrdersItems(orderItems));
+        orderInnerDTO.setOrderId(donHang.getId());
+        return orderInnerDTO;
     }
 
 
@@ -69,11 +71,13 @@ public class OrderController {
         return donHang;
     }
 
-    @PostMapping("/muangay/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public Long themSanPham(@PathVariable("id") Long id, @RequestParam(name ="quantity", defaultValue = "1") int quantity) {
+    @PostMapping("/muangay")
+    public Long themSanPham(@RequestParam("id") Long id, @RequestParam(name ="quantity", defaultValue = "1") int quantity, @RequestBody Address address) {
         OrderItem orderItem = new OrderItem();
         DonHang donHang = themDonHang();
+        donHang.setAddress(address.getAddress());
+        donHang.setPhoneNumber(address.getPhoneNumber());
+        donHang.setTenNguoiNhan(address.getReceiveName());
         orderItem.setDonHang(donHang);
         orderItem.setProduct(productRepo.findById(id).get());
         orderItem.setQuantity(quantity);

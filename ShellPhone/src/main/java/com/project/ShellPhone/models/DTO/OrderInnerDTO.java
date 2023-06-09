@@ -2,24 +2,25 @@ package com.project.ShellPhone.models.DTO;
 
 import java.util.List;
 
-public class OrderItemDTO {
-    private Long orderItemId;
+public class OrderInnerDTO {
+    private Long orderId;
     private List<OrdersIteamsDTO> iteamsDTOList;
     private double orderTotal;
 
-    public OrderItemDTO(List<OrdersIteamsDTO> iteamsDTOList) {
+    public OrderInnerDTO(List<OrdersIteamsDTO> iteamsDTOList) {
         this.iteamsDTOList = iteamsDTOList;
         for(OrdersIteamsDTO ordersIteamsDTO: iteamsDTOList){
             this.orderTotal += ordersIteamsDTO.getOrderItemtotal();
         }
     }
 
-    public void setOrderItemId(Long orderItemId) {
-        this.orderItemId = orderItemId;
+
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public Long getOrderItemId() {
-        return orderItemId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public List<OrdersIteamsDTO> getIteamsDTOList() {

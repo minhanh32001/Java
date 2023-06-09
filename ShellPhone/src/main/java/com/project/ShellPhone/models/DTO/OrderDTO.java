@@ -7,6 +7,9 @@ public class OrderDTO {
     private Long id;
     private Long userId;
     private String userUserName;
+    private String tenNguoiNhan;
+    private String diaChi;
+    private String soDienThoai;
     private Timestamp timestamp;
     private Long employeeId;
     private String employeeName;
@@ -78,5 +81,29 @@ public class OrderDTO {
 
     public void setExecute(boolean execute) {
         isExecute = execute;
+    }
+
+    public String getTenNguoiNhan() {
+        return tenNguoiNhan;
+    }
+
+    public void setTenNguoiNhan(String tenNguoiNhan) {
+        this.tenNguoiNhan = tenNguoiNhan;
+    }
+
+    public String getDiaChi() {
+        return diaChi;
+    }
+
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
+    }
+
+    public String getSoDienThoai() {
+        return soDienThoai;
+    }
+
+    public void setSoDienThoai(String soDienThoai) {
+        this.soDienThoai = soDienThoai;
     }
 }
