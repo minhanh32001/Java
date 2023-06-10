@@ -43,6 +43,25 @@ public class UserController {
         userRepo.deleteById(id);
             return ResponseEntity.ok("Da xoa user id " + id);
     }
+    @CrossOrigin
+    @PutMapping("/update/role/{id}")
+    @RolesAllowed("ROLE_ADMIN")
+    public HttpStatus setRole(@PathVariable("id") Long id, @RequestParam("role") Long roleId ) {
+        try {
+            User user = userRepo.findById(id).get();
+            Role role = roleRepo.findById(roleId).get();
+            Set userRoles = user.getRoles();
+            if(!userRoles.contains(role)){
+                userRoles.add(role);
+                user.setRoles(userRoles);
+                user.setAdmin();
+                userRepo.save(user);}
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            return HttpStatus.BAD_REQUEST;
+
+        }
+    }
 
     @CrossOrigin
     @PostMapping("/register")
@@ -50,14 +69,12 @@ public class UserController {
         if (userRepo.existsByUsername(user.getUsername()))
             return HttpStatus.CONFLICT;
         else {
-            Role roleuser = roleRepo.findById(3L).get();
-            user.setRoles(Set.of(roleuser));
+            Role roleUser = roleRepo.findById(3L).get();
+            user.setRoles(Set.of(roleUser));
             service.save(user);
             return HttpStatus.CREATED;
         }
     }
-
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDto) {

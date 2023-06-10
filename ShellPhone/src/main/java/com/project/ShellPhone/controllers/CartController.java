@@ -82,19 +82,19 @@ public class CartController {
         return (cartItemsRepo.save(cartItemMoi));
     }
 
-    @PutMapping("/mycart/update/{id}")
-    public CartItem updateCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
-        Optional<CartItem> cartItemOptional = cartItemsRepo.findById(id);
-
-        if (cartItemOptional.isPresent()) {
-            CartItem cartItem = cartItemOptional.get();
-            cartItem.setQuantity(quantity);
-            return cartItemsRepo.save(cartItem);
-        } else {
-            // Không tìm thấy cart item với id tương ứng
-            throw new NoSuchElementException("Không tìm thấy cart item với id: " + id);
-        }
-    }
+//    @PutMapping("/mycart/update/{id}")
+//    public CartItem updateCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
+//        Optional<CartItem> cartItemOptional = cartItemsRepo.findById(id);
+//
+//        if (cartItemOptional.isPresent()) {
+//            CartItem cartItem = cartItemOptional.get();
+//            cartItem.setQuantity(quantity);
+//            return cartItemsRepo.save(cartItem);
+//        } else {
+//            // Không tìm thấy cart item với id tương ứng
+//            throw new NoSuchElementException("Không tìm thấy cart item với id: " + id);
+//        }
+//    } No usage => disable
 
 
     @DeleteMapping("/mycart/delete")
@@ -108,14 +108,14 @@ public class CartController {
         return ResponseEntity.ok("Đã xóa sản phẩm này khỏi giỏ hàng");
     }
 
-    @PutMapping("/updateItems")
+    @PutMapping("/mycart/updateItems")
     public ResponseEntity<String> updateItemsInCart(@RequestBody List<CartItem> items) {
         for (CartItem item : items) {
             if(item.getQuantity()<1){
                 this.deleteAnItem(item.getId());
             }
             else{
-                cartServices.updateQuantity(item.getId(), item.getQuantity());
+                cartServices.updateQuantity(item.getId(), item.getQuantity()); // Hàm này không sinh ra ngoại lệ => không cần xử lý ngoại lệ
         }
         }
         return ResponseEntity.ok("Đã cập nhật giỏ hàng.");

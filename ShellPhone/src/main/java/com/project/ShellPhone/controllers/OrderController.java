@@ -83,7 +83,7 @@ public class OrderController {
     public ResponseEntity<String> cancelOrder(@PathVariable("id") Long id) {
         List<DonHang> donHangList = orderRepo.findByUser(getCurrentUser());
         for (DonHang donHang : donHangList) {
-            if (donHang.getId() == id && !donHang.isCancel()) {
+            if (donHang.getId().equals(id) && !donHang.isCancel()) {
                 donHang.setCancel(true);
                 List<OrderItem> orderItems = orderItemsRepo.findByDonHang(donHang);
                 for(OrderItem orderItem : orderItems){
@@ -105,7 +105,7 @@ public class OrderController {
             for(OrderItem orderItem : orderItems){
                 productServices.cancelOrder(orderItem.getProduct().getId(), orderItem.getQuantity());
             }
-            return ResponseEntity.ok("Da huy don hang voi id" + id);
+            return ResponseEntity.ok("Da huy don hang voi id " + id);
         } else {
             return ResponseEntity.ok("Khong tim thay don hang hoac da bi huy");
         }
