@@ -13,7 +13,7 @@ public class OrderDTO {
     private Timestamp timestamp;
     private Long employeeId;
     private String employeeName;
-    private boolean isIssued;
+    private boolean isCancel;
     private boolean isExecute;
 
     public OrderDTO() {
@@ -67,12 +67,12 @@ public class OrderDTO {
         this.employeeName = employeeName;
     }
 
-    public boolean isIssued() {
-        return isIssued;
+    public boolean isCancel() {
+        return isCancel;
     }
 
     public void setIssued(boolean issued) {
-        isIssued = issued;
+        isCancel = issued;
     }
 
     public boolean isExecute() {

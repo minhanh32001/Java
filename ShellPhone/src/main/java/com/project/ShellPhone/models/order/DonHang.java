@@ -26,7 +26,7 @@ public class DonHang implements Serializable {
     @Column(name ="ten_nguoi_nhan")
     private String tenNguoiNhan;
     @Column(name = "status")
-    private boolean isIssued = false;
+    private boolean isCancel = false;
     @Column(name = "execute")
     private boolean isExecute = false;
     @ManyToOne
@@ -44,12 +44,12 @@ public class DonHang implements Serializable {
     public DonHang() {
     }
 
-    public boolean isIssued() {
-        return isIssued;
+    public boolean isCancel() {
+        return isCancel;
     }
 
-    public void setIssued(boolean issued) {
-        isIssued = issued;
+    public void setCancel(boolean Cancel) {
+        isCancel = Cancel;
     }
 
     public boolean isExecute() {

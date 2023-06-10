@@ -58,7 +58,7 @@ public class DTOService {
         dto.setUserUserName(donHangData.getUser().getUsername());
         dto.setTimestamp(donHangData.getTimestamp());
         dto.setExecute(donHangData.isExecute());
-        dto.setIssued(donHangData.isIssued());
+        dto.setIssued(donHangData.isCancel());
         dto.setDiaChi(donHangData.getAddress());
         dto.setSoDienThoai(donHangData.getPhoneNumber());
         dto.setTenNguoiNhan(donHangData.getTenNguoiNhan());

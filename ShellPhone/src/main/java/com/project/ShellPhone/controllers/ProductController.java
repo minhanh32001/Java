@@ -73,7 +73,7 @@ public class ProductController {
                 ResponseEntity.status(HttpStatus.OK).body(
                         new RespondObject("ok", "product not found", ""));
     };
-    @RolesAllowed("ROLE_ADMIN")
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_EDITOR"})
     @PostMapping("/add")
     ResponseEntity<RespondObject> addProduct(@RequestBody @Valid Product newProduct) {
         newProduct.setLastPrice(); // Tính toán giá cuối cùng
@@ -82,8 +82,8 @@ public class ProductController {
                 new RespondObject("ok", "Add product successfully", newProduct)
         );
     }
-    @RolesAllowed("ROLE_ADMIN")
-    @PutMapping("/{id}/update")
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_EDITOR"})
+    @PutMapping("/update/{id}")
     ResponseEntity<RespondObject> updateProduct(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
         Optional<Product> optionalProduct = productRepo.findById(id);
         if (optionalProduct.isEmpty()) {
@@ -135,8 +135,8 @@ public class ProductController {
 
 
 
-    @RolesAllowed("ROLE_ADMIN")
-    @DeleteMapping("/{id}/delete")
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_EDITOR"})
+    @DeleteMapping("/delete/{id}")
     ResponseEntity<RespondObject> deleteProduct(@PathVariable("id") Long id) {
         productRepo.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -144,7 +144,7 @@ public class ProductController {
     }
 
 
-    @PostMapping("/{id}/comment")
+    @PostMapping("/comment/{id}")
     ResponseEntity<RespondObject> comment(@PathVariable("id") Long id, @RequestBody @Valid Comment comment) {
         Comment comment1 = comment;
         comment1.setProduct(getProductById(id).get());

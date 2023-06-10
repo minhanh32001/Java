@@ -89,10 +89,10 @@ public class ApplicationSecurity {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http
             .authorizeRequests()
-                .requestMatchers("/api/product/1/update", "/api/product/add", "/api/products/1/delete").authenticated()
-                .requestMatchers("/api/user/myprofile", "/api/order/myorder").authenticated()
-                .requestMatchers("/mycart/**", "/cart/**").authenticated()
-                .requestMatchers("/order/**").authenticated()
+                .requestMatchers("/api/product/update/**", "/api/product/add", "/api/products/delete/**").authenticated()
+                .requestMatchers("/api/user/myprofile","/api/user/update/**").authenticated()
+                .requestMatchers("api/mycart/**").authenticated()
+                .requestMatchers("api/order/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
             .logout().clearAuthentication(true).logoutSuccessUrl("/api/product").logoutUrl("/auth/logout").deleteCookies("JSESSIONID");;

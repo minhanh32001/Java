@@ -1,7 +1,8 @@
-package com.project.ShellPhone.repo;
+package com.project.ShellPhone.service;
 
 import com.project.ShellPhone.models.Cart.CartItem;
 import com.project.ShellPhone.models.user.User;
+import com.project.ShellPhone.repo.CartItemsRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

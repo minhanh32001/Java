@@ -12,7 +12,9 @@ import com.project.ShellPhone.models.order.OrderItem;
 import com.project.ShellPhone.models.user.User;
 
 import com.project.ShellPhone.repo.*;
+import com.project.ShellPhone.service.CartServices;
 import com.project.ShellPhone.service.DTOService;
+import com.project.ShellPhone.service.ProductServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -46,6 +48,8 @@ public class CartController {
 
     @Autowired
     private OrderRepo orderRepo;
+    @Autowired
+    private ProductServices productServices;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -78,7 +82,6 @@ public class CartController {
         return (cartItemsRepo.save(cartItemMoi));
     }
 
-    // Update quantity
     @PutMapping("/mycart/update/{id}")
     public CartItem updateCart(@PathVariable("id") Long id, @RequestParam("quantity") int quantity) {
         Optional<CartItem> cartItemOptional = cartItemsRepo.findById(id);
@@ -134,6 +137,7 @@ public class CartController {
         for (OrderItem orderItem : orderItems){
             orderItem.setDonHang(donHang);
             orderItemsRepo.save(orderItem);
+            productServices.makeOrder(orderItem.getProduct().getId(), orderItem.getQuantity());
         }
         deleteCartItemByUser();
         return ("Đã tạo đơn hàng mới, mã đơn hàng: " + donHang.getId());
