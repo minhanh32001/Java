@@ -30,39 +30,32 @@ public class UserController {
     @Autowired
     private UserRepo userRepo;
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_EDITOR"})
     @GetMapping("/allUser")
     List getAllUsers(){
         List<User> allUsers = userRepo.findAll();
         return mappingService.getAllUsersDTO(allUsers);
     }
-
     @CrossOrigin
-    @PostMapping("/register")
-    public HttpStatus createUser(@RequestBody @Valid User user) {
-        Optional userPresent = userRepo.findByUsername(user.getUsername());
-        if (userPresent.isPresent())
-            return HttpStatus.CONFLICT;
-        else {
-            Role roleuser = roleRepo.findById(3L).get();
-            user.setRoles(Set.of(roleuser));
-            service.save(user);
-            return HttpStatus.CREATED;
-        }
+    @DeleteMapping("/delete/{id}")
+    @RolesAllowed({"ROLE_ADMIN"})
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+        userRepo.deleteById(id);
+            return ResponseEntity.ok("Da xoa user id " + id);
     }
-
-    
     @CrossOrigin
-    @PutMapping("/update/{id}/role")
+    @PutMapping("/update/role/{id}")
     @RolesAllowed("ROLE_ADMIN")
-    public HttpStatus createUser(@PathVariable("id") Long id, @RequestParam("role") Long roleId ) {
-        User user = userRepo.findById(id).get();
+    public HttpStatus setRole(@PathVariable("id") Long id, @RequestParam("role") Long roleId ) {
         try {
+            User user = userRepo.findById(id).get();
             Role role = roleRepo.findById(roleId).get();
             Set userRoles = user.getRoles();
-            userRoles.add(role);
-            user.setRoles(userRoles);
-            user.setAdmin();
-            userRepo.save(user);
+            if(!userRoles.contains(role)){
+                userRoles.add(role);
+                user.setRoles(userRoles);
+                user.setAdmin();
+                userRepo.save(user);}
             return HttpStatus.OK;
         } catch (Exception e) {
             return HttpStatus.BAD_REQUEST;
@@ -70,7 +63,18 @@ public class UserController {
         }
     }
 
-
+    @CrossOrigin
+    @PostMapping("/register")
+    public HttpStatus createUser(@RequestBody @Valid User user) {
+        if (userRepo.existsByUsername(user.getUsername()))
+            return HttpStatus.CONFLICT;
+        else {
+            Role roleUser = roleRepo.findById(3L).get();
+            user.setRoles(Set.of(roleUser));
+            service.save(user);
+            return HttpStatus.CREATED;
+        }
+    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDto) {
@@ -78,7 +82,6 @@ public class UserController {
         if (optionalUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-
         User existingUser = optionalUser.get();
 
         // Sao chép các giá trị từ userDto vào existingUser, loại bỏ trường username
