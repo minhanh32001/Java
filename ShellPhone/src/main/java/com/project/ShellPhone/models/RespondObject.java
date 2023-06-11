@@ -1,5 +1,6 @@
 package com.project.ShellPhone.models;
 
+import com.project.ShellPhone.models.DTO.CommentDTO;
 import jdk.dynalink.linker.LinkerServices;
 
 import java.util.List;
@@ -8,8 +9,7 @@ public class RespondObject {
     private String status;
     private String message;
     private Object data;
-    private List<Comment> comments;
-    private List<Type> types;
+    private List<CommentDTO> comments;
 
     public RespondObject() {
     }
@@ -20,18 +20,18 @@ public class RespondObject {
         this.data = data;
     }
 
-    public RespondObject(String status, String message, Object data, List<Comment> comments) {
+    public RespondObject(String status, String message, Object data, List<CommentDTO> comments) {
         this.status = status;
         this.message = message;
         this.data = data;
         this.comments = comments;
     }
 
-    public List<Comment> getList() {
+    public List<CommentDTO> getComments() {
         return comments;
     }
 
-    public void setList(List<Comment> comments) {
+    public void setComments(List<CommentDTO> comments) {
         this.comments = comments;
     }
 
@@ -59,11 +59,4 @@ public class RespondObject {
         this.data = data;
     }
 
-    public List<Type> getTypes() {
-        return types;
-    }
-
-    public void setType(List<Type> types) {
-        this.types = types;
-    }
 }
