@@ -112,6 +112,9 @@ public class DTOService {
 
         productDTO.setProductId(product.getId());
         productDTO.setProductName(product.getName());
+        productDTO.setType(product.getType());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setDiscount(product.getDiscount());
         productDTO.setProductLastPrice(product.getLastPrice());
         productDTO.setProductUrl(product.getUrl());
         productDTO.setProductDescribe(product.getDescribe());
