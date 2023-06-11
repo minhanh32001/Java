@@ -69,7 +69,7 @@ public class UserController {
         if (userRepo.existsByUsername(user.getUsername()))
             return HttpStatus.CONFLICT;
         else {
-            Role roleUser = roleRepo.findById(3L).get();
+            Role roleUser = roleRepo.findById(3L).get(); // Role được lưu dưới database, 1 là admin, 2 là editor, 3 là user
             user.setRoles(Set.of(roleUser));
             service.save(user);
             return HttpStatus.CREATED;
@@ -88,7 +88,7 @@ public class UserController {
         BeanUtils.copyProperties(userDto, existingUser, "username");
 
         User updatedUser = service.save(existingUser);
-        UserDTO updatedUserDto = new UserDTO(getCurrentUser().getId(), updatedUser.getUsername(), updatedUser.getName(), updatedUser.isAdmin(), updatedUser.getUrl());
+        UserDTO updatedUserDto = new UserDTO(getCurrentUser().getId(), updatedUser.getUsername(), updatedUser.isAdmin(), updatedUser.getUrl());
 
         return ResponseEntity.ok(updatedUserDto);
     }

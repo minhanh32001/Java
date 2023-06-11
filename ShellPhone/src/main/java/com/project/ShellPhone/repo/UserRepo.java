@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User, Long> {
     List<User> findAll();
-    Optional<User> findByName(String name);
     Optional<User> findById(Long id);
     Optional<User> findByUsername(String username);
 

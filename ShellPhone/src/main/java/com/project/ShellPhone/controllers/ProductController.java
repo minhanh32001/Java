@@ -44,11 +44,17 @@ public class ProductController {
     }
 
     @GetMapping("")
-    List<ProductDTO> getAllProducts(@RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+    List<ProductDTO> getHomePage(@RequestParam(value = "page", defaultValue = "1") int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, 15);
         Page<Product> productPage = productRepo.findAll(pageable);
         List<ProductDTO> products = dtoService.getProducts(productPage.getContent());
         return products;
+    }
+    @GetMapping("/allproducts")
+    List<ProductDTO> getAllProducts(){
+        List<Product> allProducts = productRepo.findAll();
+        List<ProductDTO> allProductsDTO = dtoService.getProducts(allProducts);
+        return allProductsDTO;
     }
 
     @GetMapping("/search")
@@ -78,7 +84,7 @@ public class ProductController {
         Optional<Product> product = getProductById(id);
         return getProductById(id).isPresent() ?
                 ResponseEntity.status(HttpStatus.OK).body(
-                        new RespondObject("ok", "found product", dtoService.convertProductIntoDTO(product.get()), commentRepo.findByProduct(product.get()))
+                        new RespondObject("ok", "found product", dtoService.convertProductIntoDTO(product.get()), dtoService.getComments(commentRepo.findByProduct(product.get())))
                 ):
                 ResponseEntity.status(HttpStatus.OK).body(
                         new RespondObject("ok", "product not found", ""));

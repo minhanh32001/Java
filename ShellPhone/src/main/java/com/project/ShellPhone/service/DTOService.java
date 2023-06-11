@@ -1,6 +1,7 @@
 package com.project.ShellPhone.service;
 
 import com.project.ShellPhone.models.Cart.CartItem;
+import com.project.ShellPhone.models.Comment;
 import com.project.ShellPhone.models.DTO.*;
 import com.project.ShellPhone.models.Product;
 import com.project.ShellPhone.models.order.DonHang;
@@ -35,7 +36,6 @@ public class DTOService {
 
         dto.setId(userData.getId());
         dto.setUsername(userData.getUsername());
-        dto.setName(userData.getName());
         dto.setUrl(userData.getUrl());
         dto.setAdmin(userData.isAdmin());
         return dto;
@@ -65,7 +65,7 @@ public class DTOService {
 
         if(donHangData.getEmployee() != null){
             dto.setEmployeeId(donHangData.getEmployee().getId());
-            dto.setEmployeeName(donHangData.getEmployee().getName());
+            dto.setEmployeeName(donHangData.getEmployee().getUsername());
         }
         return dto;
     }
@@ -127,5 +127,21 @@ public class DTOService {
             allProductItems.add(this.convertProductIntoDTO(product));
         }
         return allProductItems;
+    }
+    // Comment
+    public CommentDTO convertCommentIntoDTO(Comment comment) {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(comment.getId());
+        commentDTO.setUsername(comment.getUser().getUsername());
+        commentDTO.setTimestamp(comment.getTimestamp());
+        commentDTO.setContent(comment.getContent());
+        return commentDTO;
+    }
+    public List<CommentDTO> getComments(List<Comment> comments) {
+        List<CommentDTO> allComments = new ArrayList<>();
+        for (Comment comment :  comments){
+            allComments.add(this.convertCommentIntoDTO(comment));
+        }
+        return allComments;
     }
 }

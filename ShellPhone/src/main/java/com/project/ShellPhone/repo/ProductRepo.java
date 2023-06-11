@@ -10,8 +10,11 @@ import java.util.Optional;
 public interface ProductRepo extends JpaRepository<Product, Long> {
     Page<Product> findAll(Pageable pageable);
     List<Product> findByType(Type type);
+
     List<Product> findByName(String name);
 
     List<Product> findByNameContainingIgnoreCase(String name);
+    List<Product> findAll();
+    Optional<Product> findByName(String name);
     Optional<Product> findById(Long id);
 }
