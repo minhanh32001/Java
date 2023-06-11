@@ -57,6 +57,16 @@ public class ProductController {
         return allProductsDTO;
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<RespondObject> searchProducts(String query) {
+        List<Product> foundProducts = productRepo.findByNameContainingIgnoreCase(query);
+        List<ProductDTO> foundProductDTOs = dtoService.getProducts(foundProducts);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new RespondObject("ok", "Found products", foundProductDTOs)
+        );
+    }
+
+
     @GetMapping("/byType")
     ResponseEntity<RespondObject> getProductByType(@RequestParam("type") Type type) {
         List<Product> productByType = productRepo.findByType(type);
