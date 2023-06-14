@@ -61,7 +61,8 @@ public class OrderController {
         if(donHang != null | donHang.isExecute() == false){
             donHang.setExecute(true);
             donHang.setEmployee(getCurrentUser());
-            return ResponseEntity.ok("Nhan vien" + getCurrentUser().getUsername() + "da xu ly don hang "+ donHang.getId());}
+            orderRepo.save(donHang);
+            return ResponseEntity.ok("Nhan vien " + getCurrentUser().getUsername() + "da xu ly don hang "+ donHang.getId());}
         else return ResponseEntity.ok("Don hang khong ton tai hoac da duoc xu ly");
     }
 
@@ -89,6 +90,7 @@ public class OrderController {
                 for(OrderItem orderItem : orderItems){
                     productServices.cancelOrder(orderItem.getProduct().getId(), orderItem.getQuantity());
                 }
+                orderRepo.save(donHang);
                 return ResponseEntity.ok("Da huy don hang id " + id);
             }
         }
@@ -105,6 +107,7 @@ public class OrderController {
             for(OrderItem orderItem : orderItems){
                 productServices.cancelOrder(orderItem.getProduct().getId(), orderItem.getQuantity());
             }
+            orderRepo.save(donHang);
             return ResponseEntity.ok("Da huy don hang voi id " + id);
         } else {
             return ResponseEntity.ok("Khong tim thay don hang hoac da bi huy");
