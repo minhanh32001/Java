@@ -42,7 +42,7 @@ public class User implements UserDetails {
 
     public void setAdmin() {
         for(Role role: roles){
-            if(role.getName().equals(("ROLE_ADMIN"))){
+            if (role.getName().equals(("ROLE_ADMIN"))) {
                 this.isAdmin = true;
                 break;
             }

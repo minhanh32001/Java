@@ -53,9 +53,9 @@ public class UserController {
             Set userRoles = user.getRoles();
             if(!userRoles.contains(role)){
                 userRoles.add(role);
-                user.setRoles(userRoles);
-                user.setAdmin();
-                userRepo.save(user);}
+                user.setRoles(userRoles);}
+            user.setAdmin();
+            userRepo.save(user);
             return HttpStatus.OK;
         } catch (Exception e) {
             return HttpStatus.BAD_REQUEST;
@@ -98,8 +98,16 @@ public class UserController {
     UserDTO getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        return mappingService.convertUserIntoDTO(currentUser);
+        try{
+            User user = userRepo.findById(currentUser.getId()).get();
+            return mappingService.convertUserIntoDTO(user);
+        }
+        catch (Exception exception){
+            return null;
+
+
     }
+}
 }
 
 

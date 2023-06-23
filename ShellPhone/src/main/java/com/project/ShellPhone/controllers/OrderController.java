@@ -99,8 +99,8 @@ public class OrderController {
     @RolesAllowed({"ROLE_ADMIN", "ROLE_EDITOR"})
     @PutMapping("/cancel/{id}")
     public ResponseEntity<String> adminCancelOrder(@PathVariable("id") Long id) {
-        DonHang donHang = orderRepo.findById(id).get();
-        if (donHang != null) {
+        try {
+            DonHang donHang = orderRepo.findById(id).get();
             donHang.setCancel(true);
             donHang.setEmployee(getCurrentUser());
             List<OrderItem> orderItems = orderItemsRepo.findByDonHang(donHang);
@@ -109,8 +109,8 @@ public class OrderController {
             }
             orderRepo.save(donHang);
             return ResponseEntity.ok("Da huy don hang voi id " + id);
-        } else {
-            return ResponseEntity.ok("Khong tim thay don hang hoac da bi huy");
+        } catch (Exception exception){
+            return ResponseEntity.ok(exception.getMessage());
         }
     }
     private DonHang themDonHang() {
