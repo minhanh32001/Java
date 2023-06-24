@@ -46,6 +46,8 @@ public class User implements UserDetails {
                 this.isAdmin = true;
                 break;
             }
+            else
+                this.isAdmin = false;
         }
     }
 
