@@ -50,10 +50,8 @@ public class UserController {
         try {
             User user = userRepo.findById(id).get();
             Role role = roleRepo.findById(roleId).get();
-            Set userRoles = user.getRoles();
-            if(!userRoles.contains(role)){
-                userRoles.add(role);
-                user.setRoles(userRoles);}
+            Set newUserRole = Set.of(role);
+            user.setRoles(newUserRole);
             user.setAdmin();
             userRepo.save(user);
             return HttpStatus.OK;
