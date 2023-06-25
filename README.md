@@ -15,9 +15,12 @@ Run the example of connecting to DB
 ```
 docker-compose up -d
 ```
+- please check compose file to make sure you can run it correctly <br>
+
+
 *you can use mysql shell by running command*
 ```
-docker exec -it shellphone-db-1 mysql -p
+docker exec -it mysql_java mysql -p
 ```
 *with password as `password`*
 
