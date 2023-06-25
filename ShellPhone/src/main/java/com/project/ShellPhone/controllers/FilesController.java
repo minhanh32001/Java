@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,9 +30,7 @@ public class FilesController {
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         try {
-            storageService.save(file);
-
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            message = storageService.save(file);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
